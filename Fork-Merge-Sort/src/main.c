@@ -18,21 +18,48 @@ void merge_sort(int *sorted_array,
 		int lower_bound,
 		int upper_bound)
 {
-	if ((upper_bound - lower_bound) == 1)
+  return;
+}
+
+int fork_merge_sort(int *sorted_array,
+		int *array,
+		int lower_bound,
+		int upper_bound)
+{
+	if (upper_bound - lower_bound == 1)
 	{
 		sorted_array[0] = array[lower_bound];
-		return;
+		return 0;
 	}
 
 	int pivot = lower_bound + (upper_bound - lower_bound) / 2;
 	
 	// Sort left half
 	int left_half[pivot - lower_bound];
-	merge_sort(left_half, array, lower_bound, pivot);
 
+	pid_t pid = 0;
+	if ((pid = fork()) == 0)
+	{
+	  merge_sort(left_half, array, lower_bound, pivot);
+	  return pid;
+	}
+	else if (pid == -1)
+	{
+	  return pid;
+	}
+	
 	// Sort right half
 	int right_half[upper_bound - pivot];
-	merge_sort(right_half, array, pivot, upper_bound);
+
+	if ((pid = fork()) == 0)
+	{
+	  merge_sort(right_half, array, pivot, upper_bound);
+	  return pid;
+	}
+	else if (pid == -1)
+	{
+	  return pid;
+	}
 
 	int min_left_index = 0, min_right_index = 0;
 	
@@ -54,6 +81,8 @@ void merge_sort(int *sorted_array,
 			sorted_array[i] = right_half[min_right_index++];
 		}
 	}
+
+	return pid;
 }
 
 unsigned arrays_equal(int *array1, int *array2, unsigned n)
@@ -67,7 +96,7 @@ unsigned arrays_equal(int *array1, int *array2, unsigned n)
 	return 1;
 }
 
-void test_merge_sort()
+void test_fork_merge_sort()
 {
 	{
 		int array[1] = {1};
@@ -193,11 +222,34 @@ void test_merge_sort()
 	}
 }
 
-int main()
+int main(int argc, char *argv[])
 {
-	printf("Hello World!\n");
+	// TODO: remove; test
+	if (argc > 1)
+	{
+		int i = 1;
+		for (i = 1; i < argc; ++i)
+		{
+			printf("%s", argv[i]);
+		}
+	}
 
-	test_merge_sort();
+	// TOOD: remove; test
+	// test_merge_sort();
 	
+	int size = 3;
+	int array[size], sorted_array[size]; // WARNING, FIX: needs to be in shared memory
+	array[0] = 3;
+	array[1] = 2;
+	array[2] = 1;
+
+	pid_t pid = 0;
+	if ((pid = fork_merge_sort(sorted_array, array, 0, size)) <= 0)
+	{
+		return pid;
+	}
+
+	print_array(sorted_array, size);
+
 	return 0;
 }
