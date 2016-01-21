@@ -4,10 +4,10 @@ CFLAGS=-Wall -DMEMWATCH -DMW_STDIO -I$(IDIR)
 
 ODIR=obj
 
-_DEPS = main.h
+_DEPS = utilities.h mergesort.h tests.h main.h
 DEPS = $(patsubst %, $(IDIR)/%, $(_DEPS))
 
-_OBJ = main.o
+_OBJ = utilities.o mergesort.o tests.o main.o
 OBJ = $(patsubst %, $(ODIR)/%, $(_OBJ))
 
 $(ODIR)/%.o: %.c $(DEPS)

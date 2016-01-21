@@ -1,1 +1,3 @@
 *.backup
+*~
+Fork-Merge-Sort/src/obj/*
