@@ -9,5 +9,6 @@
 
 // local
 #include "mergesort.h"
+#include "tests.h"
 
 #endif //__MAIN_H__

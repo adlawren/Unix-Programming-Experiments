@@ -8,9 +8,12 @@
 #include "utilities.h"
 #include "mergesort.h"
 
-unsigned test_fork_merge_sort(int *array,
-			      int *expected_array);
+unsigned test_fork_merge_sort(unsigned test_id,
+			      int *sorted_array,
+			      int *array,
+			      int *expected_array,
+			      unsigned array_size);
 
-void run_tests();
+int run_tests();
 
 #endif //__TESTS_H__

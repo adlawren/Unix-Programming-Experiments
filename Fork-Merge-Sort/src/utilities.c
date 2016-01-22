@@ -23,3 +23,15 @@ unsigned arrays_equal(int *array1, int *array2, unsigned n)
 
 	return 1;
 }
+
+int * get_shared_int_array(unsigned array_size)
+{
+  void *array = 0;
+  if ((array = mmap(0, array_size * sizeof(int), PROT_READ | PROT_WRITE, MAP_ANON | MAP_SHARED, -1, 0)) == 0)
+  {
+    fprintf(stderr, "ERROR: failed to initailize shared memory.\n");
+    return 0;
+  }
+
+  return (int *) array;
+}

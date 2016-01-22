@@ -1,13 +1,5 @@
 #include "mergesort.h"
 
-void merge_sort(int *sorted_array,
-		int *array,
-		int lower_bound,
-		int upper_bound)
-{
-  return;
-}
-
 int fork_merge_sort(int *sorted_array,
 		    int *array,
 		    int lower_bound,
@@ -22,34 +14,41 @@ int fork_merge_sort(int *sorted_array,
 	int pivot = lower_bound + (upper_bound - lower_bound) / 2;
 	
 	// Sort left half
-	int left_half[pivot - lower_bound];
+	// int left_half[pivot - lower_bound];
+	int *left_half = get_shared_int_array(pivot - lower_bound);
 
-	pid_t pid = 0;
-	if ((pid = fork()) == 0)
+	pid_t left_pid = 0;
+	if ((left_pid = fork()) == 0)
 	{
-	  merge_sort(left_half, array, lower_bound, pivot);
-	  return pid;
+	  fork_merge_sort(left_half, array, lower_bound, pivot);
+	  return left_pid;
 	}
-	else if (pid == -1)
+	else if (left_pid == -1)
 	{
-	  return pid;
+	  return left_pid;
 	}
 	
 	// Sort right half
-	int right_half[upper_bound - pivot];
+	// int right_half[upper_bound - pivot];
+	int *right_half = get_shared_int_array(upper_bound - pivot);
 
-	if ((pid = fork()) == 0)
+	pid_t right_pid = 0;
+	if ((right_pid = fork()) == 0)
 	{
-	  merge_sort(right_half, array, pivot, upper_bound);
-	  return pid;
+	  fork_merge_sort(right_half, array, pivot, upper_bound);
+	  return right_pid;
 	}
-	else if (pid == -1)
+	else if (right_pid == -1)
 	{
-	  return pid;
+	  return right_pid;
 	}
+
+        int status;
+	waitpid(left_pid, &status, 0);
+	waitpid(right_pid, &status, 0);
 
 	int min_left_index = 0, min_right_index = 0;
-	
+
 	int i = 0;
 	for (i = 0; i < upper_bound - lower_bound; ++i)
 	{
@@ -69,5 +68,5 @@ int fork_merge_sort(int *sorted_array,
 		}
 	}
 
-	return pid;
+	return getpid();
 }
