@@ -60,7 +60,7 @@ int fork_merge_sort(int *sorted_array,
 		{
 			sorted_array[i] = left_half[min_left_index++];
 		} 
-		else if (left_half[min_left_index] < right_half[min_right_index])
+		else if (left_half[min_left_index] <= right_half[min_right_index])
 		{
 			sorted_array[i] = left_half[min_left_index++];
 		} else {

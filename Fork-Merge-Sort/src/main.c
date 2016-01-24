@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
   char buffer[256];
   while (fgets(buffer, 256, fp) != NULL)
   {
-    printf("Next line: %s", buffer);
+    // printf("Next line: %s", buffer);
 
     unsigned array_size = 0;
     array = parse_into_shared_int_array(buffer, &array_size);
@@ -72,8 +72,14 @@ int main(int argc, char *argv[])
       return pid;
     }
 
-    // TODO: do something with the sorted resultant array.
-    // ...
+    // Display output.
+    printf("Sorting file: %s\n%d elements read\n", argv[1], array_size);
+
+    printf("Input Numbers:\n");
+    print_array(array, array_size);
+
+    printf("Sorted Numbers:\n");
+    print_array(sorted_array, array_size);
   }
 
   fclose(fp);
