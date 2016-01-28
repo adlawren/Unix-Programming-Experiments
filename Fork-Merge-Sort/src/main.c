@@ -1,41 +1,5 @@
 #include "main.h"
 
-int * parse_into_shared_int_array(char *line, unsigned *array_size)
-{
-  // Use linked list to buffer the integers
-  int_list list;
-  int_list_init(&list);
-
-  char *temp;
-  char *token = strtok(line, " ");
-  while (token)
-  {
-    int_list_add(&list, (int) strtol(token, &temp, 10));
-    token = strtok(NULL, " ");
-  }
-
-  *array_size = list.size;
-
-  // Initialize shared memory.
-  void *array = 0;
-  if ((array = mmap(0, list.size * sizeof(int), PROT_READ | PROT_WRITE, MAP_ANON | MAP_SHARED, -1, 0)) == 0)
-  {
-    printf("ERROR: failed to initailize shared memory.\n");
-    return 0;
-  }
-  
-  int *int_array = (int *) array;
-
-  int i = 0;
-  while (list.head)
-  {
-    int_array[i++] = list.head->data;
-    int_list_remove(&list, list.head->data);
-  }
-
-  return int_array;
-}
-
 int main(int argc, char *argv[])
 { 
   // Ensure the appropriate number of command line arguments is provided.
@@ -53,6 +17,7 @@ int main(int argc, char *argv[])
     return -1;
   }
 
+  // Print the filename.
   printf("Sorting File: %s\n", argv[1]);
 
   // Read the integers from the input file into a shared int array.
@@ -60,8 +25,6 @@ int main(int argc, char *argv[])
   char buffer[256];
   while (fgets(buffer, 256, fp) != NULL)
   {
-    // printf("Next line: %s", buffer);
-
     unsigned array_size = 0;
     array = parse_into_shared_int_array(buffer, &array_size);
     

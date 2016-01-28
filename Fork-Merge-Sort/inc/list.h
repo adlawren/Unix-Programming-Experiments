@@ -19,16 +19,40 @@ typedef struct int_list {
   unsigned size;
 } int_list;
 
-// TODO: add description
+/** @brief Initializes the contents of an int_list instance.
+ *
+ * @param list A pointer to an int_list instance.
+ *
+ * @return void
+ */
 void int_list_init(int_list *list);
 
-// TODO: add description
+/** @brief Adds an int_node to the given int_list instance with the given integer value.
+ *
+ * @param list A pointer to an int_list instance.
+ *
+ * @param to_add An integer with which to construct an int_node to be added to the list.
+ *
+ * @return void
+ */
 void int_list_add(int_list *list, int to_add);
 
-// TODO: add description
+/** @brief Removes a node from the list with the given integer value.
+ *
+ * @param list A pointer to an int_list instance.
+ * 
+ * @param to_remove An integer using which an int_node in the int_list may be identified and removed.
+ *
+ * @return unsigned Returns 1 if an int_node was removed from the list with the given integer value, zero otherwise.
+ */
 unsigned int_list_remove(int_list *list, int to_remove);
 
-// TODO: add description
+/** @brief Removes all nodes from the list.
+ *
+ * @param list A pointer to an int_list instance.
+ *
+ * @return void
+ */
 void int_list_clear(int_list *list);
 
 #endif //__LIST_H__

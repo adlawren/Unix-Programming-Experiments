@@ -1,6 +1,6 @@
 #include "tests.h"
 
-unsigned test_fork_merge_sort(unsigned test_id,
+pid_t test_fork_merge_sort(unsigned test_id,
 			      int *sorted_array,
 			      int *array,
 			      int *expected_array,
@@ -27,7 +27,7 @@ unsigned test_fork_merge_sort(unsigned test_id,
   return pid;
 }
 
-int run_tests()
+pid_t run_tests()
 {
   pid_t pid = 0;
   {
