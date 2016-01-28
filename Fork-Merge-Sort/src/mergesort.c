@@ -1,6 +1,6 @@
 #include "mergesort.h"
 
-int fork_merge_sort(int *sorted_array,
+pid_t fork_merge_sort(int *sorted_array,
 		    int *array,
 		    int lower_bound,
 		    int upper_bound)
@@ -8,7 +8,7 @@ int fork_merge_sort(int *sorted_array,
 	if (upper_bound - lower_bound == 1)
 	{
 		sorted_array[0] = array[lower_bound];
-		return 0;
+		return getpid();
 	}
 
 	int pivot = lower_bound + (upper_bound - lower_bound) / 2;

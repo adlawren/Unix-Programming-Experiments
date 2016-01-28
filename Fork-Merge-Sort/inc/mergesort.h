@@ -8,7 +8,7 @@
 // local
 #include "utilities.h"
 
-int fork_merge_sort(int *sorted_array,
+pid_t fork_merge_sort(int *sorted_array,
 		    int *array,
 		    int lower_bound,
 		    int upper_bound);

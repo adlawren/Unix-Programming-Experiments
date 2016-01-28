@@ -53,6 +53,8 @@ int main(int argc, char *argv[])
     return -1;
   }
 
+  printf("Sorting File: %s\n", argv[1]);
+
   // Read the integers from the input file into a shared int array.
   int *array = 0;
   char buffer[256];
@@ -73,13 +75,15 @@ int main(int argc, char *argv[])
     }
 
     // Display output.
-    printf("Sorting file: %s\n%d elements read\n", argv[1], array_size);
+    printf("%d elements read\n\n", array_size);
 
     printf("Input Numbers:\n");
     print_array(array, array_size);
+    printf("\n");
 
     printf("Sorted Numbers:\n");
     print_array(sorted_array, array_size);
+    printf("\n");
   }
 
   fclose(fp);
