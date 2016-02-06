@@ -1,4 +1,5 @@
-IDIR =../inc
+SDIR=src
+IDIR=inc
 CC=gcc
 CFLAGS=-Wall -DMEMWATCH -DMW_STDIO -I$(IDIR)
 
@@ -10,7 +11,7 @@ DEPS = $(patsubst %, $(IDIR)/%, $(_DEPS))
 _OBJ = list.o utilities.o mergesort.o tests.o main.o
 OBJ = $(patsubst %, $(ODIR)/%, $(_OBJ))
 
-$(ODIR)/%.o: %.c $(DEPS)
+$(ODIR)/%.o: $(SDIR)/%.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 mergesort: $(OBJ)
