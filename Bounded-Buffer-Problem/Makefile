@@ -1,23 +1,23 @@
 SDIR=src
 IDIR=inc
 CC=gcc
-CFLAGS=-Wall -DMEMWATCH -DMW_STDIO -I$(IDIR)
+CFLAGS=-pthread -Wall -DMEMWATCH -DMW_STDIO -I$(IDIR)
 
 ODIR=obj
 
-_DEPS = list.h utilities.h tests.h main.h
+_DEPS = deque.h list.h utilities.h assemblers.h packers.h tests.h factory.h
 DEPS = $(patsubst %, $(IDIR)/%, $(_DEPS))
 
-_OBJ = list.o utilities.o tests.o main.o
+_OBJ = deque.o list.o utilities.o assemblers.o packers.o tests.o factory.o
 OBJ = $(patsubst %, $(ODIR)/%, $(_OBJ))
 
 $(ODIR)/%.o: $(SDIR)/%.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-factorysim: $(OBJ)
+Factory: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
 .PHONY: clean
 
 clean:
-	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~
+	rm -f $(ODIR)/*.o $(SDIR)/*~ core $(IDIR)/*~

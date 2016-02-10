@@ -1,4 +1,6 @@
 *.backup
 *~
-Fork-Merge-Sort/src/obj/*
-Fork-Merge-Sort/src/mergesort
+Fork-Merge-Sort/obj/*
+Fork-Merge-Sort/mergesort
+Bounded-Buffer-Problem/obj/*
+Bounded-Buffer-Problem/Factory
