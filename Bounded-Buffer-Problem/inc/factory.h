@@ -1,21 +1,15 @@
 #ifndef __MAIN_H__
 #define __MAIN_H__
 
-// std
-#include "stdio.h"
-#include "stdlib.h"
-
-// misc
-#include "limits.h"
-#include "unistd.h"
-#include "sys/mman.h"
-#include "pthread.h"
-
 // local
+#include "common.h"
 #include "utilities.h"
 #include "assemblers.h"
 #include "packers.h"
+
+// testing
 #include "tests.h"
+#include "deque_test.h"
 
 #endif //__MAIN_H__
 

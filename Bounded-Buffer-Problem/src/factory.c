@@ -13,6 +13,10 @@ void *test_function(void *args)
 
 int main(int argc, char *argv[])
 { 
+  run_deque_tests();
+
+  return 0;
+
   // Ensure the appropriate number of command line arguments is provided.
   if (argc != 6)
   {
@@ -29,7 +33,7 @@ int main(int argc, char *argv[])
     c = strtol(argv[5], &temp, 10);
 
   // TODO: remove; test
-  printf("%d %d %d %d %d\n", a, p, l, n, c);
+  printf("Command Line Parameters: %d %d %d %d %d\n", a, p, l, n, c);
 
   // Create assembler threads
   pthread_t assembler_threads[a];
@@ -47,7 +51,19 @@ int main(int argc, char *argv[])
   }
 
   // Create packer threads
-  // ...
+  pthread_t packer_threads[a];
+  long packer_thread_ids[a];
+
+  int j = 0;
+  for (j = 0; j < a; ++j)
+  {
+    packer_thread_ids[j] = j;
+    if (pthread_create(&packer_threads[j], 0, test_function, (void *) packer_thread_ids[j]))
+    {
+      fprintf(stderr, "ERROR: pthread creation failed\n");
+      return -1;
+    }
+  }
 
   // Wait for the packer threads to complete
   // ...

@@ -5,10 +5,10 @@ CFLAGS=-pthread -Wall -DMEMWATCH -DMW_STDIO -I$(IDIR)
 
 ODIR=obj
 
-_DEPS = deque.h list.h utilities.h assemblers.h packers.h tests.h factory.h
+_DEPS = deque.h deque_test.h list.h utilities.h assemblers.h packers.h tests.h factory.h
 DEPS = $(patsubst %, $(IDIR)/%, $(_DEPS))
 
-_OBJ = deque.o list.o utilities.o assemblers.o packers.o tests.o factory.o
+_OBJ = deque.o deque_test.o list.o utilities.o assemblers.o packers.o tests.o factory.o
 OBJ = $(patsubst %, $(ODIR)/%, $(_OBJ))
 
 $(ODIR)/%.o: $(SDIR)/%.c $(DEPS)
