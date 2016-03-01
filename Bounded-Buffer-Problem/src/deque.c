@@ -50,17 +50,11 @@ product_t product_deque_pop(product_deque_t *deque)
   }
   else
   {
-    to_return.color = 0;
+    to_return.color = "";
     to_return.id = -1;
   }
 
   return to_return;
-
-  product_t p;
-  p.color = (unsigned char) 1;
-  p.id = 1;
-
-  return p;
 }
 
 void product_deque_clear(product_deque_t *deque)

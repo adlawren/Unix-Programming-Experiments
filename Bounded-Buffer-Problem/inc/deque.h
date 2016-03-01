@@ -5,7 +5,8 @@
 #include "common.h"
 
 typedef struct product_t {
-  unsigned char color;
+  //unsigned char color;
+  char* color;
   long id;
 } product_t;
 

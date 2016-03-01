@@ -9,11 +9,10 @@ void *test_thread(void *args)
 {
   test_thread_args_t *test_thread_args = (test_thread_args_t *) args;
 
-  // TODO: Remove; test
-  printf("I'm thread %lu\n", test_thread_args->id);
+  printf("Current thread id: %lu\n", test_thread_args->id);
 
   product_t p;
-  p.color = 1;
+  p.color = (char *) COLORS[test_thread_args->id];
   p.id = test_thread_args->id;
 
   product_deque_push(test_thread_args->deque, &p);
@@ -21,10 +20,27 @@ void *test_thread(void *args)
   pthread_exit(0);
 }
 
+size_t equal_str(char *str_a, char * str_b)
+{
+  char *a_ptr = str_a, *b_ptr = str_b;
+  while (*a_ptr != '\0')
+  {
+    if (*a_ptr != *b_ptr)
+    {
+      return 0;
+    }
+
+    ++a_ptr;
+    ++b_ptr;
+  }
+
+  return 1;
+}
+
 void deque_pop_assert(product_deque_t *deque, product_t *expected)
 {
   product_t product = product_deque_pop(deque);
-  assert(expected->color == product.color);
+  assert(equal_str(expected->color, product.color)); // == product.color);
   assert(expected->id == product.id);
 }
 
@@ -36,7 +52,7 @@ void run_deque_tests()
   product_deque_init(&deque, queue_size);
 
   product_t expected_result;
-  expected_result.color = 0;
+  expected_result.color = "";
   expected_result.id = -1;
   deque_pop_assert(&deque, &expected_result);
 
@@ -66,10 +82,10 @@ void run_deque_tests()
   for (k = 0; k < queue_size; ++k)
   {
     next_product = product_deque_pop(&deque);
-    printf("Next product contents: color: %d, id: %lu\n", (int) next_product.color, next_product.id);
+    printf("Next product contents: color: %s, id: %lu\n", next_product.color, next_product.id);
   }
 
-  expected_result.color = 0;
+  expected_result.color = "";
   expected_result.id = -1;
   deque_pop_assert(&deque, &expected_result);
 
