@@ -1,21 +1,5 @@
 #include "deque.h"
 
-int product_deque_advance(product_deque_t *deque)
-{
-  if (deque->size > 0)
-  {
-    int i;
-    for (i = 0; i < deque->size - 1; ++i)
-    {
-      deque->products[i] = deque->products[i + 1];
-    }
-
-    return 0;
-  }
-
-  return -1;
-}
-
 void product_deque_init(product_deque_t *deque, unsigned max_size)
 {
   pthread_mutex_t mutex;
@@ -56,8 +40,6 @@ product_t product_deque_pop(product_deque_t *deque)
   {
     to_return = deque->products[0];
 
-    // product_deque_advance(deque);
-    // Or, alternatively:
     int i;
     for (i = 0; i < deque->size - 1; ++i)
     {
