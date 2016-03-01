@@ -1,22 +1,7 @@
 #include "factory.h"
 
-// TODO: remove; test
-void *test_function(void *args)
-{
-  long id = (long) args;
-
-  // TODO: remove test
-  printf("I'm thread %lu\n", id);
-
-  pthread_exit(0);
-}
-
 int main(int argc, char *argv[])
 { 
-  run_deque_tests();
-
-  return 0;
-
   // Ensure the appropriate number of command line arguments is provided.
   if (argc != 6)
   {
@@ -37,13 +22,13 @@ int main(int argc, char *argv[])
 
   // Create assembler threads
   pthread_t assembler_threads[a];
-  long assembler_thread_ids[a];
+  assembler_thread_args_t assembler_thread_args[a];
 
-  int i = 0;
+  int i;
   for (i = 0; i < a; ++i)
   {
-    assembler_thread_ids[i] = i;
-    if (pthread_create(&assembler_threads[i], 0, test_function, (void *) assembler_thread_ids[i]))
+    assembler_thread_args[i].id = i;
+    if (pthread_create(&assembler_threads[i], 0, assembler_thread, (void *) &assembler_thread_args[i]))
     {
       fprintf(stderr, "ERROR: pthread creation failed\n");
       return -1;
@@ -51,14 +36,14 @@ int main(int argc, char *argv[])
   }
 
   // Create packer threads
-  pthread_t packer_threads[a];
-  long packer_thread_ids[a];
+  pthread_t packer_threads[p];
+  packer_thread_args_t packer_thread_args[p];
 
   int j = 0;
-  for (j = 0; j < a; ++j)
+  for (j = 0; j < p; ++j)
   {
-    packer_thread_ids[j] = j;
-    if (pthread_create(&packer_threads[j], 0, test_function, (void *) packer_thread_ids[j]))
+    packer_thread_args[j].id = j;
+    if (pthread_create(&packer_threads[j], 0, packer_thread, (void *) &packer_thread_args[j]))
     {
       fprintf(stderr, "ERROR: pthread creation failed\n");
       return -1;
@@ -66,7 +51,11 @@ int main(int argc, char *argv[])
   }
 
   // Wait for the packer threads to complete
-  // ...
+  int k;
+  for (k = 0; k < p; ++k)
+  {
+    pthread_join(packer_threads[k], 0);
+  }
 
   pthread_exit(0);
 
