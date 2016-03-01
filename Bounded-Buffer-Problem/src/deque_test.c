@@ -8,6 +8,8 @@ typedef struct test_thread_args_t {
 void *test_thread(void *args)
 {
   test_thread_args_t *test_thread_args = (test_thread_args_t *) args;
+
+  // TODO: Remove; test
   printf("I'm thread %lu\n", test_thread_args->id);
 
   product_t p;
@@ -53,35 +55,19 @@ void run_deque_tests()
     }
   }
 
-  /*
-  product_t p;
-  p.color = 1;
-  p.id = 1;
-
-  product_t expected_result;
-  
-  expected_result.color = 0;
-  expected_result.id = -1;
-  deque_pop_assert(&deque, &expected_result);
-
-  assert(product_deque_push(&deque, &p) == 0);
-  assert(product_deque_push(&deque, &p) == 0);
-  assert(product_deque_push(&deque, &p) == -1);
-  */
-  
-  // Wait for threads to complete
-  pthread_exit(0); // TODO: fix; this is broken.
-
   int j;
   for (j = 0; j < queue_size; ++j)
   {
-    expected_result.color = 1;
-    expected_result.id = j;
-    deque_pop_assert(&deque, &expected_result);
+    pthread_join(test_threads[j], 0);
   }
 
-  // TODO: remove test
-  printf("Made it here\n");
+  product_t next_product;
+  int k;
+  for (k = 0; k < queue_size; ++k)
+  {
+    next_product = product_deque_pop(&deque);
+    printf("Next product contents: color: %d, id: %lu\n", (int) next_product.color, next_product.id);
+  }
 
   expected_result.color = 0;
   expected_result.id = -1;
