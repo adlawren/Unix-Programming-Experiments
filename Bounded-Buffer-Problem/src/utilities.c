@@ -73,3 +73,21 @@ int * parse_into_shared_int_array(char *line, unsigned *array_size)
 
   return int_array;
 }
+
+int atomic_read(int *i)
+{
+  pthread_mutex_t mutex;
+  pthread_mutex_init(&mutex, 0);
+  pthread_mutex_lock(&mutex);
+
+  return *i;
+}
+
+void atomic_decrement(int *i)
+{
+  pthread_mutex_t mutex;
+  pthread_mutex_init(&mutex, 0);
+  pthread_mutex_lock(&mutex);
+
+  --(*i);
+}

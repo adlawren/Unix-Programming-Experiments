@@ -13,6 +13,7 @@
 
 // local
 #include "colors.h"
+#include "utilities.h"
 #include "deque.h"
 
 #endif //__COMMON_H__

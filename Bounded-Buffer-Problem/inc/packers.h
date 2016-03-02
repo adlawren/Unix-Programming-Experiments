@@ -9,6 +9,7 @@
 typedef struct packer_thread_args_t {
   long id;
   unsigned box_size;
+  int* unpacked_products;
   product_deque_t *deque;
 } packer_thread_args_t;
 

@@ -5,6 +5,7 @@
 #include "stdio.h"
 #include "string.h"
 #include "sys/mman.h"
+#include "pthread.h"
 
 // local
 #include "list.h"
@@ -49,5 +50,8 @@ int * get_shared_int_array(unsigned array_size);
  */
 int * parse_into_shared_int_array(char *line, unsigned *array_size);
 
+int atomic_read(int *i);
+
+void atomic_decrement(int *i);
 
 #endif //__UTILITIES_H__

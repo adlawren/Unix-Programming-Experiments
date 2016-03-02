@@ -21,6 +21,13 @@ int main(int argc, char *argv[])
   product_deque_t deque;
   product_deque_init(&deque, l);
 
+  // Variable used to indicate the total number of products yet to be packed.
+  int *unpacked_products = (int *) malloc(sizeof(int));
+  *unpacked_products = a * c;
+
+  // TODO: remove; test
+  printf("Initial unpacked products: %d\n", *unpacked_products);
+
   // TODO: remove; test
   printf("Command Line Parameters: %d %d %d %d %d\n", a, p, l, n, c);
 
@@ -50,6 +57,7 @@ int main(int argc, char *argv[])
   {
     packer_thread_args[j].id = j;
     packer_thread_args[j].box_size = n;
+    packer_thread_args[j].unpacked_products = unpacked_products;
     packer_thread_args[j].deque = &deque;
     if (pthread_create(&packer_threads[j], 0, packer_thread, (void *) &packer_thread_args[j]))
     {
@@ -67,6 +75,9 @@ int main(int argc, char *argv[])
 
   // TODO: remove; test
   printf("Deque size: %d\n", deque.size);
+
+  // TODO: remove?
+  assert(atomic_read(unpacked_products) == 0);
 
   product_deque_clear(&deque);
 

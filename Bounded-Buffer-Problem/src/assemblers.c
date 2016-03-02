@@ -7,15 +7,18 @@ void *assembler_thread(void *args)
   assembler_thread_args_t *assembler_thread_args = (assembler_thread_args_t *) args;
 
   // TODO: remove; test
-  printf("I'm assembler thread %lu\n", assembler_thread_args->id);
+  // printf("I'm assembler thread %lu\n", assembler_thread_args->id);
 
   product_t p;
-  int i;
+  int i, push_result;
   for (i = 0; i < assembler_thread_args->product_count; ++i) {
     p.color = (char *) COLORS[assembler_thread_args->id];
     p.id = i;
 
-    product_deque_push(assembler_thread_args->deque, &p);
+    do
+    {
+      push_result = product_deque_push(assembler_thread_args->deque, &p);
+    } while (push_result < 0);
   }
 
   pthread_exit(0);
