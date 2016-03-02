@@ -32,6 +32,7 @@ int main(int argc, char *argv[])
   for (i = 0; i < a; ++i)
   {
     assembler_thread_args[i].id = i;
+    assembler_thread_args[i].product_count = c;
     assembler_thread_args[i].deque = &deque;
     if (pthread_create(&assembler_threads[i], 0, assembler_thread, (void *) &assembler_thread_args[i]))
     {
@@ -40,21 +41,7 @@ int main(int argc, char *argv[])
     }
   }
 
-  // Wait for the packer threads to complete
-  /*
-  int f;
-  for (f = 0; f < a; ++f)
-  {
-    pthread_join(assembler_threads[f], 0);
-  }
-
-  pthread_exit(0);
-
-  return 0;
-  */
-
   // Create packer threads
-
   pthread_t packer_threads[p];
   packer_thread_args_t packer_thread_args[p];
 
@@ -62,6 +49,7 @@ int main(int argc, char *argv[])
   for (j = 0; j < p; ++j)
   {
     packer_thread_args[j].id = j;
+    packer_thread_args[j].box_size = n;
     packer_thread_args[j].deque = &deque;
     if (pthread_create(&packer_threads[j], 0, packer_thread, (void *) &packer_thread_args[j]))
     {

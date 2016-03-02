@@ -8,17 +8,23 @@ void *packer_thread(void *args)
   printf("I'm packer thread %lu\n", packer_thread_args->id);
 
   product_t p;
-  p.id = -1;
-  p.color = "";
-  while (p.id == -1) {
-    printf("Queue size: %d\n", packer_thread_args->deque->size);
+  int i;
+  for (i = 0; i < packer_thread_args->box_size; ++i)
+  {
+    p.id = -1;
+    p.color = "";
+    while (p.id == -1) {
+      
+      // TODO: remove; test
+      printf("Queue size: %d\n", packer_thread_args->deque->size);
 
-    p = product_deque_pop(packer_thread_args->deque);
-    sleep(1);
+      sleep(1);
+      p = product_deque_pop(packer_thread_args->deque);
+    }
+
+    // TODO: remove test
+    printf("Obtained product with id: %lu, color: %s\n", p.id, p.color);
   }
-
-  // TODO: remove test
-  printf("Obtained product with id: %lu, color: %s\n", p.id, p.color);
 
   pthread_exit(0);
 }

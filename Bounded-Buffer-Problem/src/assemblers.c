@@ -10,10 +10,13 @@ void *assembler_thread(void *args)
   printf("I'm assembler thread %lu\n", assembler_thread_args->id);
 
   product_t p;
-  p.color = (char *) COLORS[assembler_thread_args->id];
-  p.id = assembler_thread_args->id;
+  int i;
+  for (i = 0; i < assembler_thread_args->product_count; ++i) {
+    p.color = (char *) COLORS[assembler_thread_args->id];
+    p.id = i;
 
-  product_deque_push(assembler_thread_args->deque, &p);
+    product_deque_push(assembler_thread_args->deque, &p);
+  }
 
   pthread_exit(0);
 }
