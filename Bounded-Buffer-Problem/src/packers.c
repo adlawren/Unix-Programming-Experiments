@@ -2,31 +2,34 @@
 
 void pack_products(product_deque_t *product_deque, long thread_id)
 {
-  // TODO: Refactor? Use sprintf instead?
-  //printf("[Packer %lu]: I have a box of products containing: ", thread_id);
-  printf("[Packer %lu]: I have a box of products containing:\n", thread_id);
-  
+  char box_summary[MAX_BUFFER_SIZE],
+    *box_summary_base_addr = box_summary,
+    *box_summary_current_addr = box_summary,
+    buffer[MAX_BUFFER_SIZE];
+  sprintf(buffer, "[Packer %lu]: I have a box of products containing: ", thread_id);
+
+  snprintf(box_summary_current_addr, sizeof(buffer), "%s", buffer);
+  box_summary_current_addr += strlen(buffer);
+
   product_t next_product;
-  int i;
-  for (i = 0; i < product_deque->size; ++i)
+  while (product_deque->size)
   {
     next_product = product_deque_pop(product_deque);
-    
-    printf("%s, %d\n", next_product.color, next_product.id);
 
-    /*
-    printf("%s %d", next_product.color, next_product.id);
-
-    if (i < product_deque->size - 1)
+    if (product_deque->size)
     {
-      printf(", ");
+      sprintf(buffer, "%s %d, ", next_product.color, next_product.id);
     }
     else
     {
-      printf("\n");
+      sprintf(buffer, "%s %d\n", next_product.color, next_product.id);
     }
-    */
+
+    snprintf(box_summary_current_addr, sizeof(buffer), "%s", buffer);
+    box_summary_current_addr += strlen(buffer);
   }
+
+  printf("%s", box_summary_base_addr);
 }
 
 void *packer_thread(void *args)
@@ -39,6 +42,9 @@ void *packer_thread(void *args)
   product_t p;
   while (*(packer_thread_args->unpacked_products))
   {
+    // TODO: Remove; test
+    printf("[Packer %lu]: Unpacked products %d\n", packer_thread_args->id, atomic_read(packer_thread_args->unpacked_products));
+
     int i;
     for (i = 0; i < packer_thread_args->box_size; ++i)
     {
@@ -49,7 +55,7 @@ void *packer_thread(void *args)
       }
       
       // TODO: remove test
-      printf("Packer (id: %lu) Obtained product with id: %d, color: %s\n", packer_thread_args->id, p.id, p.color);
+      // printf("Packer (id: %lu) Obtained product with id: %d, color: %s\n", packer_thread_args->id, p.id, p.color);
 
       product_deque_push(&deque, &p);
       atomic_decrement(packer_thread_args->unpacked_products);

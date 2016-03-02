@@ -16,4 +16,6 @@
 #include "utilities.h"
 #include "deque.h"
 
+#define MAX_BUFFER_SIZE 2048
+
 #endif //__COMMON_H__

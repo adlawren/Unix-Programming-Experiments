@@ -25,12 +25,6 @@ int main(int argc, char *argv[])
   int *unpacked_products = (int *) malloc(sizeof(int));
   *unpacked_products = a * c;
 
-  // TODO: remove; test
-  printf("Initial unpacked products: %d\n", *unpacked_products);
-
-  // TODO: remove; test
-  printf("Command Line Parameters: %d %d %d %d %d\n", a, p, l, n, c);
-
   // Create assembler threads
   pthread_t assembler_threads[a];
   assembler_thread_args_t assembler_thread_args[a];
@@ -73,12 +67,11 @@ int main(int argc, char *argv[])
     pthread_join(packer_threads[k], 0);
   }
 
-  // TODO: remove; test
-  printf("Deque size: %d\n", deque.size);
-
   // TODO: remove?
-  assert(atomic_read(unpacked_products) == 0);
+  assert(*unpacked_products == 0);
+  assert(deque.size == 0);
 
+  free(unpacked_products);
   product_deque_clear(&deque);
 
   pthread_exit(0);
