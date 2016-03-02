@@ -17,6 +17,10 @@ int main(int argc, char *argv[])
     n = strtol(argv[4], &temp, 10),
     c = strtol(argv[5], &temp, 10);
 
+  // Initialize the shared buffer
+  product_deque_t deque;
+  product_deque_init(&deque, l);
+
   // TODO: remove; test
   printf("Command Line Parameters: %d %d %d %d %d\n", a, p, l, n, c);
 
@@ -28,6 +32,7 @@ int main(int argc, char *argv[])
   for (i = 0; i < a; ++i)
   {
     assembler_thread_args[i].id = i;
+    assembler_thread_args[i].deque = &deque;
     if (pthread_create(&assembler_threads[i], 0, assembler_thread, (void *) &assembler_thread_args[i]))
     {
       fprintf(stderr, "ERROR: pthread creation failed\n");
@@ -35,14 +40,29 @@ int main(int argc, char *argv[])
     }
   }
 
+  // Wait for the packer threads to complete
+  /*
+  int f;
+  for (f = 0; f < a; ++f)
+  {
+    pthread_join(assembler_threads[f], 0);
+  }
+
+  pthread_exit(0);
+
+  return 0;
+  */
+
   // Create packer threads
+
   pthread_t packer_threads[p];
   packer_thread_args_t packer_thread_args[p];
 
-  int j = 0;
+  int j;
   for (j = 0; j < p; ++j)
   {
     packer_thread_args[j].id = j;
+    packer_thread_args[j].deque = &deque;
     if (pthread_create(&packer_threads[j], 0, packer_thread, (void *) &packer_thread_args[j]))
     {
       fprintf(stderr, "ERROR: pthread creation failed\n");
@@ -56,6 +76,11 @@ int main(int argc, char *argv[])
   {
     pthread_join(packer_threads[k], 0);
   }
+
+  // TODO: remove; test
+  printf("Deque size: %d\n", deque.size);
+
+  product_deque_clear(&deque);
 
   pthread_exit(0);
 

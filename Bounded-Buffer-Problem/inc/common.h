@@ -11,4 +11,8 @@
 #include "sys/mman.h"
 #include "pthread.h"
 
+// local
+#include "colors.h"
+#include "deque.h"
+
 #endif //__COMMON_H__

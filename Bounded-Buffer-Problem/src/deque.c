@@ -13,6 +13,8 @@ void product_deque_init(product_deque_t *deque, unsigned max_size)
 
 int product_deque_push(product_deque_t *deque, product_t* to_add)
 {
+  printf("In push\n");
+
   pthread_mutex_t mutex;
   pthread_mutex_init(&mutex, 0);
   pthread_mutex_lock(&mutex);
@@ -21,9 +23,17 @@ int product_deque_push(product_deque_t *deque, product_t* to_add)
     return -1;
   }
 
+  printf("Made it here\n");
+  
   deque->products[deque->size].color = to_add->color;
+
+  printf("???\n");
+
   deque->products[deque->size].id = to_add->id;
+  
   ++deque->size;
+
+  printf("And here\n");
 
   return 0;
 }
