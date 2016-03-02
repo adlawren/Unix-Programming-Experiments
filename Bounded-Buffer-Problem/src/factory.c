@@ -2,6 +2,10 @@
 
 int main(int argc, char *argv[])
 { 
+  run_deque_tests();
+
+  return 0;
+
   // Ensure the appropriate number of command line arguments is provided.
   if (argc != 6)
   {

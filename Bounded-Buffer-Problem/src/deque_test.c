@@ -1,6 +1,6 @@
 #include "deque_test.h"
 
-const char *COLORS[] = {"AliceBlue","AntiqueWhite","Aqua","Aquamarine","Azure","Beige","Bisque","Black","BlanchedAlmond","Blue","BlueViolet","Brown","BurlyWood","CadetBlue","Chartreuse","Chocolate","Coral","CornflowerBlue","Cornsilk","Crimson","Cyan","DarkBlue","DarkCyan","DarkGodenRod","DarkGray","DarkGrey","DarkGreen","DarkKhaki","DarkMagenta","DarkOliveGreen","Darkorange","DarkOrchid","DarkRed","DarkSalmon","DarkSeaGreen","DarkSlateBlue","DarkSlateGray","DarkSlateGrey","DarkTurquoise","DarkViolet","DeepPink","DeepSkyBlue","DimGray","DimGrey","DodgerBlue","FireBrick","FloralWhite","ForestGreen","Fuchsia","Gainsboro","GhostWhite","God","GodenRod","Gray","Grey","Green","GreenYellow","HoneyDew","HotPink","IndianRed","Indigo","Ivory","Khaki","Lavender","LavenderBlush","LawnGreen","LemonChiffon","LightBlue","LightCoral","LightCyan","LightGodenRodYellow","LightGray","LightGrey","LightGreen","LightPink","LightSalmon","LightSeaGreen","LightSkyBlue","LightSlateGray","LightSlateGrey","LightSteelBlue","LightYellow","Lime","LimeGreen","Linen","Magenta","Maroon","MediumAquaMarine","MediumBlue","MediumOrchid","MediumPurple","MediumSeaGreen","MediumSlateBlue","MediumSpringGreen","MediumTurquoise","MediumVioletRed","MidnightBlue","MintCream","MistyRose","Moccasin","NavajoWhite","Navy","OdLace","Olive","OliveDrab","Orange","OrangeRed","Orchid","PaleGodenRod","PaleGreen","PaleTurquoise","PaleVioletRed","PapayaWhip","PeachPuff","Peru","Pink","Plum","PowderBlue","Purple","Red","RosyBrown","RoyalBlue","SaddleBrown","Salmon","SandyBrown","SeaGreen","SeaShell","Sienna","Silver","SkyBlue","SlateBlue","SlateGray","SlateGrey","Snow","SpringGreen","SteelBlue","Tan","Teal","Thistle","Tomato","Turquoise","Violet","Wheat","White","WhiteSmoke","Yellow","YellowGreen"};
+const char *TEST_COLORS[] = {"AliceBlue","AntiqueWhite","Aqua","Aquamarine","Azure","Beige","Bisque","Black","BlanchedAlmond","Blue","BlueViolet","Brown","BurlyWood","CadetBlue","Chartreuse","Chocolate","Coral","CornflowerBlue","Cornsilk","Crimson","Cyan","DarkBlue","DarkCyan","DarkGodenRod","DarkGray","DarkGrey","DarkGreen","DarkKhaki","DarkMagenta","DarkOliveGreen","Darkorange","DarkOrchid","DarkRed","DarkSalmon","DarkSeaGreen","DarkSlateBlue","DarkSlateGray","DarkSlateGrey","DarkTurquoise","DarkViolet","DeepPink","DeepSkyBlue","DimGray","DimGrey","DodgerBlue","FireBrick","FloralWhite","ForestGreen","Fuchsia","Gainsboro","GhostWhite","God","GodenRod","Gray","Grey","Green","GreenYellow","HoneyDew","HotPink","IndianRed","Indigo","Ivory","Khaki","Lavender","LavenderBlush","LawnGreen","LemonChiffon","LightBlue","LightCoral","LightCyan","LightGodenRodYellow","LightGray","LightGrey","LightGreen","LightPink","LightSalmon","LightSeaGreen","LightSkyBlue","LightSlateGray","LightSlateGrey","LightSteelBlue","LightYellow","Lime","LimeGreen","Linen","Magenta","Maroon","MediumAquaMarine","MediumBlue","MediumOrchid","MediumPurple","MediumSeaGreen","MediumSlateBlue","MediumSpringGreen","MediumTurquoise","MediumVioletRed","MidnightBlue","MintCream","MistyRose","Moccasin","NavajoWhite","Navy","OdLace","Olive","OliveDrab","Orange","OrangeRed","Orchid","PaleGodenRod","PaleGreen","PaleTurquoise","PaleVioletRed","PapayaWhip","PeachPuff","Peru","Pink","Plum","PowderBlue","Purple","Red","RosyBrown","RoyalBlue","SaddleBrown","Salmon","SandyBrown","SeaGreen","SeaShell","Sienna","Silver","SkyBlue","SlateBlue","SlateGray","SlateGrey","Snow","SpringGreen","SteelBlue","Tan","Teal","Thistle","Tomato","Turquoise","Violet","Wheat","White","WhiteSmoke","Yellow","YellowGreen"};
 
 typedef struct test_thread_args_t {
   long id;
@@ -14,7 +14,7 @@ void *test_thread(void *args)
   printf("Current thread id: %lu\n", test_thread_args->id);
 
   product_t p;
-  p.color = (char *) COLORS[test_thread_args->id];
+  p.color = (char *) TEST_COLORS[test_thread_args->id];
   p.id = test_thread_args->id;
 
   product_deque_push(test_thread_args->deque, &p);
@@ -47,8 +47,43 @@ void deque_pop_assert(product_deque_t *deque, product_t *expected)
 }
 
 void run_deque_tests()
+{  
+  unsigned queue_size = 5;
+
+  product_deque_t deque;
+  product_deque_init(&deque, queue_size);
+
+  product_t p, expected_result;
+  expected_result.color = "";
+  expected_result.id = -1;
+  deque_pop_assert(&deque, &expected_result);
+
+  int i;
+  for (i = 0; i < queue_size; ++i)
+  {
+    p.color = "Tast Color";
+    p.id = i;
+    product_deque_push(&deque, &p);
+  }
+
+  int j;
+  for (j = 0; j < queue_size; ++j)
+  {
+    expected_result.color = "Tast Color";
+    expected_result.id = j;
+    deque_pop_assert(&deque, &expected_result);
+  }
+
+  expected_result.color = "";
+  expected_result.id = -1;
+  deque_pop_assert(&deque, &expected_result);
+
+  product_deque_clear(&deque);
+}
+
+void run_threaded_deque_tests()
 {
-  unsigned queue_size = 25;
+  unsigned queue_size = 5;
 
   product_deque_t deque;
   product_deque_init(&deque, queue_size);
@@ -84,7 +119,7 @@ void run_deque_tests()
   for (k = 0; k < queue_size; ++k)
   {
     next_product = product_deque_pop(&deque);
-    printf("Next product contents: color: %s, id: %lu\n", next_product.color, next_product.id);
+    printf("Next product contents: color: %s, id: %d\n", next_product.color, next_product.id);
   }
 
   expected_result.color = "";
