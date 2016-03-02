@@ -1,15 +1,15 @@
 #include "list.h"
 
-void int_list_init(int_list *list)
+void product_list_init(product_list_t *list)
 {
   list->head = 0;
   list->tail = 0;
   list->size = 0;
 }
 
-void int_list_add(int_list *list, int to_add)
+void product_list_add(product_list_t *list, product_t to_add)
 {
-  int_node *new_node = (int_node *) malloc(sizeof(int_node));
+  product_node_t *new_node = (product_node_t *) malloc(sizeof(product_node_t));
   new_node->next = 0;
   new_node->data = to_add;
 
@@ -31,13 +31,19 @@ void int_list_add(int_list *list, int to_add)
   ++list->size;
 }
 
-unsigned int_list_remove(int_list *list, int to_remove)
+product_t product_list_remove(product_list_t *list, product_t to_remove)
 {
-  int_node *prev_node = 0, *next_node = list->head;
+  product_t result;
+  result.color = "";
+  result.id = -1;
+
+  product_node_t *prev_node = 0, *next_node = list->head;
   while (next_node)
   {
-    if (next_node->data == to_remove)
+    if (next_node->data.id == to_remove.id)
     {
+      result = next_node->data;
+
       if (prev_node)
       {
 	prev_node->next = next_node->next;
@@ -50,19 +56,19 @@ unsigned int_list_remove(int_list *list, int to_remove)
       free(next_node);
       --list->size;
 
-      return 1;
+      break;
     }
     
     prev_node = next_node;
     next_node = next_node->next;
   }
 
-  return 0;
+  return result;
 }
 
-void int_list_clear(int_list *list)
+void product_list_clear(product_list_t *list)
 {
-  int_node *prev_node = 0, *next_node = list->head;
+  product_node_t *prev_node = 0, *next_node = list->head;
   while (next_node)
   {
     prev_node = next_node;

@@ -4,11 +4,15 @@
 // local
 #include "common.h"
 
+// TODO: move to common.h?
+#include "product.h"
+
+/*
 typedef struct product_t {
-  //unsigned char color;
   char* color;
   long id;
 } product_t;
+*/
 
 typedef struct product_deque_t {
   product_t *products;

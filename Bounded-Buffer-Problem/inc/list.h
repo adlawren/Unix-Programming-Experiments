@@ -8,16 +8,20 @@
 // std
 #include "stdlib.h"
 
-typedef struct int_node {
-  struct int_node *next;
-  int data;
-} int_node;
+// TODO: move to common.h?
+#include "product.h"
 
+// TODO: rename
+typedef struct product_node_t {
+  struct product_node_t *next;
+  product_t data;
+} product_node_t;
 
-typedef struct int_list {
-  int_node *head, *tail;
+// TODO: rename
+typedef struct product_list_t {
+  product_node_t *head, *tail;
   unsigned size;
-} int_list;
+} product_list_t;
 
 /** @brief Initializes the contents of an int_list instance.
  *
@@ -25,7 +29,7 @@ typedef struct int_list {
  *
  * @return void
  */
-void int_list_init(int_list *list);
+void product_list_init(product_list_t *list);
 
 /** @brief Adds an int_node to the given int_list instance with the given integer value.
  *
@@ -35,7 +39,7 @@ void int_list_init(int_list *list);
  *
  * @return void
  */
-void int_list_add(int_list *list, int to_add);
+void product_list_add(product_list_t *list, product_t to_add);
 
 /** @brief Removes a node from the list with the given integer value.
  *
@@ -45,7 +49,7 @@ void int_list_add(int_list *list, int to_add);
  *
  * @return unsigned Returns 1 if an int_node was removed from the list with the given integer value, zero otherwise.
  */
-unsigned int_list_remove(int_list *list, int to_remove);
+product_t product_list_remove(product_list_t *list, product_t to_remove);
 
 /** @brief Removes all nodes from the list.
  *
@@ -53,6 +57,6 @@ unsigned int_list_remove(int_list *list, int to_remove);
  *
  * @return void
  */
-void int_list_clear(int_list *list);
+void product_list_clear(product_list_t *list);
 
 #endif //__LIST_H__
