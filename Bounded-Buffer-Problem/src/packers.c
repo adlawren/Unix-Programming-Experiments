@@ -42,26 +42,24 @@ void *packer_thread(void *args)
   product_t p;
   while (*(packer_thread_args->unpacked_products))
   {
-    // TODO: Remove; test
-    printf("[Packer %lu]: Unpacked products %d\n", packer_thread_args->id, atomic_read(packer_thread_args->unpacked_products));
-
     int i;
     for (i = 0; i < packer_thread_args->box_size; ++i)
-    {
+    { 
       p.id = -1;
       p.color = "";
-      while (p.id == -1) {
+      while (p.id == -1 && atomic_read(packer_thread_args->unpacked_products)) {
 	p = product_deque_pop(packer_thread_args->deque);
       }
       
-      // TODO: remove test
-      // printf("Packer (id: %lu) Obtained product with id: %d, color: %s\n", packer_thread_args->id, p.id, p.color);
+      if (p.id == -1) {
+        break;
+      }
 
       product_deque_push(&deque, &p);
       atomic_decrement(packer_thread_args->unpacked_products);
     }
 
-    pack_products(&deque, packer_thread_args->id);
+    if (deque.size) pack_products(&deque, packer_thread_args->id);
   }
 
   pthread_exit(0);
