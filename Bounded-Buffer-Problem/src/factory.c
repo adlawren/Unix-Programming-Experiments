@@ -2,7 +2,7 @@
 
 int main(int argc, char *argv[])
 {
-  // Ensure the appropriate number of command line arguments is provided.
+  // Ensure the appropriate number of command line arguments is provided
   if (argc != 6)
   {
     fprintf(stderr, "ERROR: Five command line arguments must be given.\n");
@@ -17,11 +17,42 @@ int main(int argc, char *argv[])
     n = strtol(argv[4], &temp, 10),
     c = strtol(argv[5], &temp, 10);
 
+  // Ensure each argument is non-zero/in the correct range
+  if (a == 0 || a >= MAX_COLOR_COUNT)
+  {
+    fprintf(stderr, "ERROR: The number of assemblers must be greater than zero and less than 147.\n");
+    return -1;
+  }
+
+  if (p == 0)
+  {
+    fprintf(stderr, "ERROR: The number of packers must be non-zero.\n");
+    return -1;
+  }
+  
+  if (l == 0)
+  {
+    fprintf(stderr, "ERROR: The size of the bounded buffer must be non-zero.\n");
+    return -1;
+  }
+
+  if (n == 0)
+  {
+    fprintf(stderr, "ERROR: The number of products which comprise a box must be non-zero.\n");
+    return -1;
+  }
+
+  if (c == 0)
+  {
+    fprintf(stderr, "ERROR: The number of products produced by assemblers must be non-zero.\n");
+    return -1;
+  }
+
   // Initialize the shared buffer
   product_deque_t deque;
   product_deque_init(&deque, l);
 
-  // Variable used to indicate the total number of products yet to be packed.
+  // Variable used to indicate the total number of products yet to be packed
   int *unpacked_products = (int *) malloc(sizeof(int));
   *unpacked_products = a * c;
 

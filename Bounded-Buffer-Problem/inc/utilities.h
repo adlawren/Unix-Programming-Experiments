@@ -3,55 +3,49 @@
 
 // std
 #include "stdio.h"
+
+// sys
 #include "string.h"
 #include "sys/mman.h"
 #include "pthread.h"
 
 // local
-//#include "list.h"
+#include "product.h"
 
-/** @brief Prints to contents of the given array to stdout.
+/** @brief Determines whether or not the contents of the two given strings are identical.
  *
- * @param array The array, the contents of which will be printed.
+ * @param str_a The first string for comparison.
  *
- * @param n The size of the array.
+ * @param str_b The second string for comparison.
  * 
- * @return void
+ * @returns size_t One if the contents of the two strings are identical, zero otherwise.
  */
-void print_array(int * array, unsigned n);
+size_t strings_equal(char *str_a, char *str_b);
 
-/** @brief Determines whether or not the contents of the two given arrays are identical.
+/** @brief Determines whether or not the contents of the two given products are identical.
  *
- * @param array1 The first array for comparison.
+ * @param str_a The first product for comparison.
  *
- * @param array2 The second array for comparison. 
- *
- * @param n The size of the array.
+ * @param str_b The second product for comparison.
  * 
- * @returns unsigned One if the contents of the two arrays are identical, zero otherwise.
+ * @returns size_t One if the contents of the two products are identical, zero otherwise.
  */
-unsigned arrays_equal(int *array1, int *array2, unsigned n);
+size_t products_equal(product_t *product_a, product_t *product_b);
 
-/** @brief Returns a shared integer array, the size of which is equal to the specified size.
+/** @brief Reads the numerical value associated with the given integer pointer after constructing a mutex to prohibit concurrent access to the pointer.
  *
- * @param array_size The size of the array to be allocated.
+ * @param i Pointer to an integer value.
  * 
- * @return int* A pointer to the allocated shared array.
+ * @returns int The value associated with the given integer pointer.
  */
-int * get_shared_int_array(unsigned array_size);
-
-/** @brief Parse the given string (assumed to contain space separated integers) into a shared array.
- *
- * @param line The string to be parsed, containing space separated integers.
- *
- * @param array_size A pointer to an integer, the value of which will be updated to the size of the array as computed during parsing.
- * 
- * @return int* A pointer to the allocated shared array.
- */
-int * parse_into_shared_int_array(char *line, unsigned *array_size);
-
 int atomic_read(int *i);
 
+/** @brief Decrements the numerical value associated with the given integer pointer after constructing a mutex to prohibit concurrent access to the pointer.
+ *
+ * @param i Pointer to an integer value.
+ * 
+ * @returns void.
+ */
 void atomic_decrement(int *i);
 
 #endif //__UTILITIES_H__

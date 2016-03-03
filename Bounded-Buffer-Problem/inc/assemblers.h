@@ -1,5 +1,11 @@
+// sys
+#include "pthread.h"
+
 // local
-#include "common.h"
+#include "deque.h"
+#include "product.h"
+
+#define MAX_COLOR_COUNT 147
 
 typedef struct assembler_thread_args_t {
   long id;
@@ -7,4 +13,10 @@ typedef struct assembler_thread_args_t {
   product_deque_t *deque;
 } assembler_thread_args_t;
 
+/** @brief The thread associated with an assembler within the factory simulation.
+ *
+ * @param i Void pointer to the arguments of the thread; internally assumed to be a pointer to an assembler_thread_args_t struct.
+ * 
+ * @returns void.
+ */
 void *assembler_thread(void *args);

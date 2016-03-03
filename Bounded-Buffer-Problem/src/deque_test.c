@@ -22,27 +22,10 @@ void *test_thread(void *args)
   pthread_exit(0);
 }
 
-size_t equal_str(char *str_a, char * str_b)
-{
-  char *a_ptr = str_a, *b_ptr = str_b;
-  while (*a_ptr != '\0')
-  {
-    if (*a_ptr != *b_ptr)
-    {
-      return 0;
-    }
-
-    ++a_ptr;
-    ++b_ptr;
-  }
-
-  return 1;
-}
-
 void deque_pop_assert(product_deque_t *deque, product_t *expected)
 {
   product_t product = product_deque_pop(deque);
-  assert(equal_str(expected->color, product.color));
+  assert(strings_equal(expected->color, product.color));
   assert(expected->id == product.id);
 }
 

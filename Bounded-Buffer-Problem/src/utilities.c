@@ -1,41 +1,35 @@
 #include "utilities.h"
 
-void print_array(int *array, unsigned n)
+size_t strings_equal(char *str_a, char * str_b)
 {
-  // printf("\n-----Array Contents-----\n");
-  
-  int i = 0;
-  for (i = 0; i < n; ++i)
+  char *a_ptr = str_a, *b_ptr = str_b;
+  while (*a_ptr != '\0')
   {
-    printf("%d ", array[i]);
-  }
-  
-  printf("\n");
+    if (*a_ptr != *b_ptr)
+    {
+      return 0;
+    }
 
-  // printf("\n----------\n");
-}
-
-unsigned arrays_equal(int *array1, int *array2, unsigned n)
-{
-  unsigned i = 0;
-  for (i = 0; i < n; ++i)
-  {
-    if (array1[i] != array2[i]) return 0;
+    ++a_ptr;
+    ++b_ptr;
   }
-  
+
   return 1;
 }
 
-int * get_shared_int_array(unsigned array_size)
+size_t products_equal(product_t *product_a, product_t *product_b)
 {
-  void *array = 0;
-  if ((array = mmap(0, array_size * sizeof(int), PROT_READ | PROT_WRITE, MAP_ANON | MAP_SHARED, -1, 0)) == 0)
+  if (!strings_equal(product_a->color, product_b->color))
   {
-    fprintf(stderr, "ERROR: failed to initailize shared memory.\n");
     return 0;
   }
 
-  return (int *) array;
+  if (product_a->id != product_b->id)
+  {
+    return 0;
+  }
+
+  return 1;
 }
 
 int atomic_read(int *i)
