@@ -15,7 +15,7 @@ typedef struct assembler_thread_args_t {
 
 /** @brief The thread associated with an assembler within the factory simulation.
  *
- * @param i Void pointer to the arguments of the thread; internally assumed to be a pointer to an assembler_thread_args_t struct.
+ * @param args Void pointer to the arguments of the thread; internally assumed to be a pointer to an assembler_thread_args_t struct.
  * 
  * @returns void.
  */

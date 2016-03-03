@@ -7,6 +7,12 @@ typedef struct test_thread_args_t {
   product_deque_t *deque;
 } test_thread_args_t;
 
+/** @brief The thread used during concurrent testing of the product_deque_t struct and associated functions.
+ *
+ * @param args Void pointer to the arguments of the thread; internally assumed to be a pointer to an test_thread_args_t struct.
+ * 
+ * @returns void.
+ */
 void *test_thread(void *args)
 {
   test_thread_args_t *test_thread_args = (test_thread_args_t *) args;
@@ -22,6 +28,14 @@ void *test_thread(void *args)
   pthread_exit(0);
 }
 
+/** @brief Asserts that contents of the product removed from the front of the given double ended product queue are equivalent to the contents of the given product.
+ *
+ * @param deque Pointer to a double ended queue instance. 
+ *
+ * @param expected Pointer to a product, the contents of which are expected to be identical of the popped product.
+ *
+ * @returns void.
+ */
 void deque_pop_assert(product_deque_t *deque, product_t *expected)
 {
   product_t product = product_deque_pop(deque);

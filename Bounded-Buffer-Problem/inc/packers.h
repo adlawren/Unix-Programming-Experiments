@@ -21,7 +21,7 @@ typedef struct packer_thread_args_t {
 
 /** @brief The thread associated with a packer within the factory simulation.
  *
- * @param i Void pointer to the arguments of the thread; internally assumed to be a pointer to a packer_thread_args_t struct.
+ * @param args Void pointer to the arguments of the thread; internally assumed to be a pointer to a packer_thread_args_t struct.
  * 
  * @returns void.
  */
