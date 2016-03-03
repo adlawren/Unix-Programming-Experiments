@@ -1,5 +1,13 @@
 #include "packers.h"
 
+/** @brief A function used to print the contents of a double ended product queue and clear the queue.
+ *
+ * @param product_deque Pointer to a double ended product queue.
+ *
+ * @param thread_id The id of the thread with which the double ended product queue is associated.
+ * 
+ * @returns void.
+ */
 void pack_products(product_deque_t *product_deque, long thread_id)
 {
   char box_summary[MAX_BUFFER_SIZE],
