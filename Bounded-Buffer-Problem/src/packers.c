@@ -50,17 +50,12 @@ void *packer_thread(void *args)
   product_t p;
   while (*(packer_thread_args->unpacked_products))
   {
-    //printf("[Packer %lu]: I've entered the while loop.\n", pthread_self() % 10000);
-
     int i;
     for (i = 0; i < packer_thread_args->box_size; ++i)
-    { 
-      //printf("[Packer %lu]: I've entered the for loop.\n", pthread_self() % 10000);
-      
+    {
       p.id = -1;
       p.color = "";
       while (p.id == -1 && atomic_read(packer_thread_args->unpacked_products)) {
-	//printf("[Packer %lu]: I've entered the pop loop.\n", pthread_self() % 10000);
 	p = product_deque_pop(packer_thread_args->deque);
       }
       
@@ -70,16 +65,10 @@ void *packer_thread(void *args)
 
       product_deque_push(&deque, &p);
       atomic_decrement(packer_thread_args->unpacked_products);
-
-      //printf("[Packer %lu]: I'm exiting the pop loop.\n", pthread_self() % 10000);
     }
-
-    //printf("[Packer %lu]: I'm about to pack products.\n", pthread_self() % 10000);
 
     if (deque.size) pack_products(&deque, packer_thread_args->id);
   }
-
-  //printf("[Packer %lu]: I'm exiting.s\n", pthread_self() % 10000);
 
   pthread_exit(0);
 }
