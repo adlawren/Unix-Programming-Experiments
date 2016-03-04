@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
   // Wait for all products to be packed
   while (atomic_read(unpacked_products));
   
-  usleep(50000);
+  //usleep(50000);
   //sleep(1);
 
   //printf("After while loop.\n");

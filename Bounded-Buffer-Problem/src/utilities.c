@@ -32,6 +32,15 @@ size_t products_equal(product_t *product_a, product_t *product_b)
   return 1;
 }
 
+void atomic_print(char *s)
+{
+  pthread_mutex_t mutex;
+  pthread_mutex_init(&mutex, 0);
+  pthread_mutex_lock(&mutex);
+
+  printf("%s", s);
+}
+
 int atomic_read(int *i)
 {
   pthread_mutex_t mutex;

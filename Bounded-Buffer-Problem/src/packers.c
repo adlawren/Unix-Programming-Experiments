@@ -37,7 +37,8 @@ void pack_products(product_deque_t *product_deque, long thread_id)
     box_summary_current_addr += strlen(buffer);
   }
 
-  printf("%s", box_summary_base_addr);
+  //printf("%s", box_summary_base_addr);
+  atomic_print(box_summary_base_addr);
 }
 
 void *packer_thread(void *args)

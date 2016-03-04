@@ -32,6 +32,14 @@ size_t strings_equal(char *str_a, char *str_b);
  */
 size_t products_equal(product_t *product_a, product_t *product_b);
 
+/** @brief Prints the given string to stdout after locking a mutex.
+ *
+ * @param s String to be printed.
+ * 
+ * @returns void.
+ */
+void atomic_print(char *s);
+
 /** @brief Reads the numerical value associated with the given integer pointer after constructing a mutex to prohibit concurrent access to the pointer.
  *
  * @param i Pointer to an integer value.
