@@ -14,6 +14,7 @@
 #include "semaphore.h"
 
 typedef struct product_deque_t {
+  pthread_mutex_t mutex;
   sem_t full, empty;
   product_t *products;
   unsigned size, max_size;
