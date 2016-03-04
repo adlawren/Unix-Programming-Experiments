@@ -93,15 +93,6 @@ int main(int argc, char *argv[])
 
   // Wait for all products to be packed
   while (atomic_read(unpacked_products));
-  
-  //printf("I'm here.\n");
-
-  // Resolve deadlock (s)
-  //int sem_value;
-  //sem_getvalue(&deque.full, &sem_value);
-
-  // TODO: Remove; test
-  //printf("Semaphore value: %d\n", sem_value);
 
   // Wait for the packer threads to complete
   int k;
@@ -110,8 +101,6 @@ int main(int argc, char *argv[])
     sem_post(&deque.full);
     pthread_join(packer_threads[k], 0);
   }
-
-  //printf("Threads have joined.\n");
 
   // TODO: remove?
   assert(*unpacked_products == 0);
