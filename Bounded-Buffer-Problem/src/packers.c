@@ -48,20 +48,28 @@ void *packer_thread(void *args)
   product_deque_init(&deque, packer_thread_args->box_size);
 
   product_t p;
-  while (*(packer_thread_args->unpacked_products))
+  while (atomic_read(packer_thread_args->unpacked_products))
   {
+    //printf("[Packer %lu]: Entering while loop.\n", pthread_self() % 10000);
+
     int i;
     for (i = 0; i < packer_thread_args->box_size; ++i)
     {
+      //printf("[Packer %lu]: Entering for loop.\n", pthread_self() % 10000);
+
       p.id = -1;
       p.color = "";
       while (p.id == -1 && atomic_read(packer_thread_args->unpacked_products)) {
+	//printf("[Packer %lu]: Entering second while loop.\n", pthread_self() % 10000);
+	
 	p = product_deque_pop(packer_thread_args->deque);
       }
       
       if (p.id == -1) {
         break;
       }
+
+      //printf("[Packer %lu]: Pushing deque.\n", pthread_self() % 10000);
 
       product_deque_push(&deque, &p);
       atomic_decrement(packer_thread_args->unpacked_products);

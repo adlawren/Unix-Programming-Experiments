@@ -93,12 +93,19 @@ int main(int argc, char *argv[])
 
   // Wait for all products to be packed
   while (atomic_read(unpacked_products));
+  
+  usleep(50000);
+  //sleep(1);
+
+  //printf("After while loop.\n");
 
   // Resolve potential deadlock (s)
   int k;
   for (k = 0; k < p; ++k) {
     sem_post(&deque.full);
   }
+
+  //printf("Posted to semaphores.\n");
 
   // Wait for the packer threads to complete
   int m;
@@ -107,12 +114,18 @@ int main(int argc, char *argv[])
     pthread_join(packer_threads[m], 0);
   }
 
+  //printf("Joined threads.\n");
+
   // TODO: remove?
   assert(*unpacked_products == 0);
   assert(deque.size == 0);
 
+  //printf("Passed assertions.\n");
+
   free(unpacked_products);
   product_deque_clear(&deque);
+
+  //printf("Exiting.\n");
 
   pthread_exit(0);
 

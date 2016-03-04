@@ -1,6 +1,9 @@
 #ifndef __MAIN_H__
 #define __MAIN_H__
 
+// std
+#include "unistd.h"
+
 // local
 #include "utilities.h"
 #include "assemblers.h"
