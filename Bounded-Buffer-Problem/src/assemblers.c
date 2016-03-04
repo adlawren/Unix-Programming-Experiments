@@ -9,8 +9,8 @@ void *assembler_thread(void *args)
   product_t p;
   int i, push_result;
   for (i = 0; i < assembler_thread_args->product_count; ++i) {
-    p.color = (char *) COLORS[assembler_thread_args->id];
-    p.id = i;
+    p.color = (char *) COLORS[pthread_self() % MAX_COLOR_COUNT];
+    p.id = i + 1;
 
     do
     {

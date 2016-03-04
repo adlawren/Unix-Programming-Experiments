@@ -18,9 +18,9 @@ int main(int argc, char *argv[])
     c = strtol(argv[5], &temp, 10);
 
   // Ensure each argument is non-zero/in the correct range
-  if (a == 0 || a >= MAX_COLOR_COUNT)
+  if (a == 0 || a > MAX_COLOR_COUNT)
   {
-    fprintf(stderr, "ERROR: The number of assemblers must be greater than zero and less than 147.\n");
+    fprintf(stderr, "ERROR: The number of assemblers must be greater than zero and less than or equal to 147.\n");
     return -1;
   }
 

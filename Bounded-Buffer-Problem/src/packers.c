@@ -14,7 +14,7 @@ void pack_products(product_deque_t *product_deque, long thread_id)
     *box_summary_base_addr = box_summary,
     *box_summary_current_addr = box_summary,
     buffer[MAX_BUFFER_SIZE];
-  sprintf(buffer, "[Packer %lu]: I have a box of products containing: ", thread_id);
+  sprintf(buffer, "[Packer %lu]: I have a box of products containing: ", pthread_self() % 10000);
 
   snprintf(box_summary_current_addr, sizeof(buffer), "%s", buffer);
   box_summary_current_addr += strlen(buffer);
