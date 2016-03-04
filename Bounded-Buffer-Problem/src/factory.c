@@ -94,12 +94,17 @@ int main(int argc, char *argv[])
   // Wait for all products to be packed
   while (atomic_read(unpacked_products));
 
-  // Wait for the packer threads to complete
+  // Resolve potential deadlock (s)
   int k;
-  for (k = 0; k< p; ++k)
-  {
+  for (k = 0; k < p; ++k) {
     sem_post(&deque.full);
-    pthread_join(packer_threads[k], 0);
+  }
+
+  // Wait for the packer threads to complete
+  int m;
+  for (m = 0; m < p; ++m)
+  {
+    pthread_join(packer_threads[m], 0);
   }
 
   // TODO: remove?
