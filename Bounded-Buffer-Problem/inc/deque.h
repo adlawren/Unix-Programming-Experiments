@@ -11,8 +11,11 @@
 // local
 #include "product.h"
 #include "utilities.h"
+#include "semaphore.h"
 
 typedef struct product_deque_t {
+  sem_t full, empty;
+  pthread_mutex_t mutex;
   product_t *products;
   unsigned size, max_size;
 } product_deque_t;

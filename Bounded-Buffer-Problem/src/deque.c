@@ -2,9 +2,13 @@
 
 void product_deque_init(product_deque_t *deque, unsigned max_size)
 {
+  sem_init(&deque->full, 0, 0);
+  sem_init(&deque->empty, 0, max_size);
+  
   pthread_mutex_t mutex;
   pthread_mutex_init(&mutex, 0);
   pthread_mutex_lock(&mutex);
+  //pthread_mutex_init(&deque->mutex, 0);
 
   deque->products = (product_t *) malloc(sizeof(product_t) * max_size);
   deque->size = 0;
@@ -13,11 +17,15 @@ void product_deque_init(product_deque_t *deque, unsigned max_size)
 
 int product_deque_push(product_deque_t *deque, product_t* to_add)
 {
+  sem_wait(&deque->empty);
+
   pthread_mutex_t mutex;
   pthread_mutex_init(&mutex, 0);
   pthread_mutex_lock(&mutex);
+  //pthread_mutex_lock(&deque->mutex);
 
   if (deque->size >= deque->max_size) {
+    pthread_mutex_unlock(&deque->mutex);
     return -1;
   }
   
@@ -25,17 +33,30 @@ int product_deque_push(product_deque_t *deque, product_t* to_add)
   deque->products[deque->size].id = to_add->id;
   ++deque->size;
 
+  sem_post(&deque->full);
+  //pthread_mutex_unlock(&deque->mutex);
+
   return 0;
 }
 
 product_t product_deque_pop(product_deque_t *deque)
 {
+  /*
+  int sem_value;
+  sem_getvalue(&deque->full, &sem_value);
+  printf("In pop: full: %d\n", sem_value);
+  */
+
+  sem_wait(&deque->full);
+
+  //printf("Made it past the semaphore.\n");
+
   pthread_mutex_t mutex;
   pthread_mutex_init(&mutex, 0);
   pthread_mutex_lock(&mutex);
+  //pthread_mutex_lock(&deque->mutex);
 
   product_t to_return;
-
   if (deque->size > 0)
   {
     to_return = deque->products[0];
@@ -54,15 +75,25 @@ product_t product_deque_pop(product_deque_t *deque)
     to_return.id = -1;
   }
 
+  sem_post(&deque->empty);
+  //pthread_mutex_unlock(&deque->mutex);
+
   return to_return;
 }
 
 void product_deque_clear(product_deque_t *deque)
 {
+  sem_destroy(&deque->full);
+  sem_destroy(&deque->empty);
+
   pthread_mutex_t mutex;
   pthread_mutex_init(&mutex, 0);
   pthread_mutex_lock(&mutex);
 
+  //pthread_mutex_lock(&deque->mutex);
+  
   free(deque->products);
   deque->products = 0;
+
+  //pthread_mutex_unlock(&deque->mutex);
 }
