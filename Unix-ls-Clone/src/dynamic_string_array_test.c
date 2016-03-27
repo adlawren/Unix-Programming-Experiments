@@ -20,35 +20,37 @@ void run_tests() {
   assert(string_array.size == 0);
   assert(strcmp(popped, to_add) == 0);
 
-  to_add = "string 1";
+  to_add = "string a";
   dynamic_string_array_push(&string_array, to_add);
 
-  to_add = "string 2";
+  to_add = "string c";
   dynamic_string_array_push(&string_array, to_add);
 
   assert(string_array.size == 2);
   assert(string_array.max_size == initial_max_size);
   
-  to_add = "string 3";
+  to_add = "string b";
   dynamic_string_array_push(&string_array, to_add);
 
   assert(string_array.size == 3);
   assert(string_array.max_size == 2 * initial_max_size);
+
+  dynamic_string_array_sort(&string_array);
   
   dynamic_string_array_pop(&string_array, popped);
   
   assert(string_array.size == 2);
-  assert(strcmp(popped, "string 3") == 0);
+  assert(strcmp(popped, "string c") == 0);
 
   dynamic_string_array_pop(&string_array, popped);
   
   assert(string_array.size == 1);
-  assert(strcmp(popped, "string 2") == 0);
+  assert(strcmp(popped, "string b") == 0);
 
   dynamic_string_array_pop(&string_array, popped);
   
   assert(string_array.size == 0);
-  assert(strcmp(popped, "string 1") == 0);
+  assert(strcmp(popped, "string a") == 0);
 
   dynamic_string_array_clear(&string_array);
 }

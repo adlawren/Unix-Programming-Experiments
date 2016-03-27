@@ -22,47 +22,23 @@ void display_file_info(const char *filename)
     return;
   }
 
-  // Check if the given file system item is a file
-  char *ptr;
-  if (S_ISREG(buf.st_mode)) {
-    ptr = "regular";
-  } else if (S_ISDIR(buf.st_mode)) {
-    ptr = "directory";
-  } else if (S_ISCHR(buf.st_mode)) {
-    ptr = "character special";
-  } else if (S_ISBLK(buf.st_mode)) {
-    ptr = "block special";
-  } else if (S_ISFIFO(buf.st_mode)) {
-    ptr = "fifo";
-  } else if (S_ISLNK(buf.st_mode)) {
-    ptr = "symbolic link";
-  } else if (S_ISSOCK(buf.st_mode)) {
-    ptr = "socket";
-  } else {
-    ptr = "** unknown mode **";
-  }
-  
-  // printf("%s\n", ptr);
-
   // Print permissions
   print_permissions(&buf);
-  printf(" ");
+  printf("\t");
 
-  printf("%u ", (size_t) buf.st_nlink);
+  printf("%u\t", (size_t) buf.st_nlink);
 
   struct passwd *pwd = getpwuid(buf.st_uid);
-  printf("%s ", pwd->pw_name);
+  printf("%s\t", pwd->pw_name);
 
   struct group *grp = getgrgid(buf.st_gid);
-  printf("%s ", grp->gr_name);
+  printf("%s\t", grp->gr_name);
 
-  printf("%u ", (size_t) buf.st_size);
-
-  // printf("%s", localtime(&(buf.st_mtime)));
+  printf("%u\t", (size_t) buf.st_size);
 
   char buffer[2048];
   strftime(buffer, 2048, "%b %d %H:%M", localtime(&(buf.st_mtime)));
-  printf("%s ", buffer);
+  printf("%s\t", buffer);
   
   int i;
   for (i = 0; i < strlen(filename); ++i) {
@@ -75,7 +51,27 @@ void display_file_info(const char *filename)
     prev_token = token;
   }
 
-  printf("%s ", prev_token);
+  printf("%s", prev_token);
+
+  // Determine the type of file
+  char *ptr = 0;
+  if (S_ISDIR(buf.st_mode)) {
+    ptr = "/";
+  } else if (S_ISCHR(buf.st_mode)) {
+    ptr = "character special";
+  } else if (S_ISBLK(buf.st_mode)) {
+    ptr = "block special";
+  } else if (S_ISFIFO(buf.st_mode)) {
+    ptr = "|";
+  } else if (S_ISLNK(buf.st_mode)) {
+    ptr = "@";
+  } else if (S_ISSOCK(buf.st_mode)) {
+    ptr = "=";
+  } else if (S_ISREG(buf.st_mode) && buf.st_mode & 0111) {
+    ptr = "*";
+  }
+  
+  if (ptr) printf("%s", ptr);
 
   printf("\n");
 }

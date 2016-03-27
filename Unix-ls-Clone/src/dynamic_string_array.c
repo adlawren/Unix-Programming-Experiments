@@ -64,6 +64,64 @@ void dynamic_string_array_pop(dynamic_string_array_t *string_array, char *result
   --string_array->size;
 }
 
+int char_compare(char c1, char c2) {
+  // int i1 = (int) c1, i2 = (int) c2;
+  if (c1 < c2) {
+    return 1;
+  } else if (c1 > c2) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+
+void string_to_lower(const char *str, char *lower)
+{
+  int i;
+  for (i = 0; i < strlen(str); ++i) {
+    lower[i] = tolower(str[i]);
+  }
+
+  lower[ strlen(str) ] = 0;
+}
+
+int string_compare(const char *str1, const char *str2) {
+  size_t min_len = strlen(str1);
+  if (strlen(str2) < min_len) min_len = strlen(str2);
+
+  char lower1[2048], lower2[2048];
+  string_to_lower(str1, lower1);
+  string_to_lower(str2, lower2);
+
+  int i;
+  for (i = 0; i < min_len; ++i) {
+    if (char_compare(lower1[i], lower2[i])) {
+      return char_compare(lower1[i], lower2[i]);
+    }
+  }
+
+  return 0;
+}
+
+void dynamic_string_array_swap(dynamic_string_array_t *string_array, int idx1, int idx2)
+{
+  char *temp = string_array->array[idx1];
+  string_array->array[idx1] = string_array->array[idx2];
+  string_array->array[idx2] = temp;
+}
+
+void dynamic_string_array_sort(dynamic_string_array_t *string_array)
+{
+  int i, j;
+  for (i = 0; i < string_array->size; ++i) {
+    for (j = i + 1; j < string_array->size; ++j) {
+      if (string_compare(string_array->array[i], string_array->array[j]) < 0) {
+	dynamic_string_array_swap(string_array, i, j);
+      }
+    }
+  }
+}
+
 void dynamic_string_array_clear(dynamic_string_array_t *string_array)
 {
   int i;

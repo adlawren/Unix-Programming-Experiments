@@ -7,6 +7,7 @@
 
 // misc
 #include "string.h"
+#include "ctype.h"
 
 typedef struct dynamic_string_array_t {
   size_t size, max_size, max_string_size;
@@ -40,6 +41,8 @@ void dynamic_string_array_push(dynamic_string_array_t *string_array, char *to_ad
  * @returns product_t Returns the product which was at the front of the double ended queue, if the queue is empty at the time of invocation, a product with an id of -1 is returned.
  */
 void dynamic_string_array_pop(dynamic_string_array_t *string_array, char *result);
+
+void dynamic_string_array_sort(dynamic_string_array_t *string_array);
 
 /** @brief Removes all products from the double ended queue.
  *

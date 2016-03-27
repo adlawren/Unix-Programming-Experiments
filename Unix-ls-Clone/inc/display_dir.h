@@ -14,6 +14,7 @@
 #include "errno.h"
 
 // local
+#include "dynamic_string_array.h"
 #include "display_file_info.h"
 
 #define MAX_PATH_LEN 2048
