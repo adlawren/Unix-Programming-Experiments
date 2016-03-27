@@ -24,13 +24,12 @@ void display_dir(const char *dirname)
     return;
   }
 
+  // Build list of filenames in the directory
+  // ...
+
   // Traverse the directory contents
   struct dirent *next_dirent;
   while ((next_dirent = readdir(dp))) {
-    if ((strcmp(next_dirent->d_name, ".") == 0) || (strcmp(next_dirent->d_name, "..") == 0)) {
-      continue;
-    }
-
     char full_path[MAX_PATH_LEN];
     strncpy(full_path, dirname, strlen(dirname));
     full_path[ strlen(dirname) ] = 0; // Prevent buffer overrun
@@ -49,8 +48,16 @@ void display_dir(const char *dirname)
 
     display_file_info(full_path);
 
+    if ((strcmp(next_dirent->d_name, ".") == 0) || (strcmp(next_dirent->d_name, "..") == 0)) {
+      continue;
+    }
+
     if (S_ISDIR(buf.st_mode)) {
       display_dir(full_path);
     }
   }
+
+  closedir(dp);
+
+  printf("\n");
 }

@@ -15,9 +15,6 @@ void print_permissions(struct stat *buf) {
 
 void display_file_info(const char *filename)
 {
-  // TODO: Remove; test
-  printf("Display file info invoked with argument: %s\n", filename);
-
   struct stat buf;
 
   if (lstat(filename, &buf) < 0) {
@@ -49,6 +46,36 @@ void display_file_info(const char *filename)
 
   // Print permissions
   print_permissions(&buf);
+  printf(" ");
+
+  printf("%u ", (size_t) buf.st_nlink);
+
+  struct passwd *pwd = getpwuid(buf.st_uid);
+  printf("%s ", pwd->pw_name);
+
+  struct group *grp = getgrgid(buf.st_gid);
+  printf("%s ", grp->gr_name);
+
+  printf("%u ", (size_t) buf.st_size);
+
+  // printf("%s", localtime(&(buf.st_mtime)));
+
+  char buffer[2048];
+  strftime(buffer, 2048, "%b %d %H:%M", localtime(&(buf.st_mtime)));
+  printf("%s ", buffer);
+  
+  int i;
+  for (i = 0; i < strlen(filename); ++i) {
+    buffer[i] = filename[i];
+  }
+  buffer[ strlen(filename) ] = 0;
+
+  char *token = strtok(buffer, "/"), *prev_token = 0;
+  while ((token = strtok(0, "/")) != 0) {
+    prev_token = token;
+  }
+
+  printf("%s ", prev_token);
 
   printf("\n");
 }
