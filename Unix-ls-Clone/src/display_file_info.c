@@ -1,7 +1,14 @@
 #include "display_file_info.h"
 
 void print_permissions(struct stat *buf) {
-  printf((S_ISDIR((*buf).st_mode)) ? "d" : "-");
+  if (S_ISDIR((*buf).st_mode)) {
+    printf("d");
+  } else if (S_ISLNK((*buf).st_mode)) {
+    printf("l");
+  } else {
+    printf("-");
+  }
+
   printf(((*buf).st_mode & S_IRUSR) ? "r" : "-");
   printf(((*buf).st_mode & S_IWUSR) ? "w" : "-");
   printf(((*buf).st_mode & S_IXUSR) ? "x" : "-");
@@ -24,21 +31,21 @@ void display_file_info(const char *filename)
 
   // Print permissions
   print_permissions(&buf);
-  printf("\t");
+  printf(" ");
 
-  printf("%u\t", (size_t) buf.st_nlink);
+  printf("%u ", (size_t) buf.st_nlink);
 
   struct passwd *pwd = getpwuid(buf.st_uid);
-  printf("%s\t", pwd->pw_name);
+  printf("%s ", pwd->pw_name);
 
   struct group *grp = getgrgid(buf.st_gid);
-  printf("%s\t", grp->gr_name);
+  printf("%s ", grp->gr_name);
 
-  printf("%u\t", (size_t) buf.st_size);
+  printf("%*u ", 20, (size_t) buf.st_size);
 
   char buffer[2048];
   strftime(buffer, 2048, "%b %d %H:%M", localtime(&(buf.st_mtime)));
-  printf("%s\t", buffer);
+  printf("%s ", buffer);
   
   int i;
   for (i = 0; i < strlen(filename); ++i) {

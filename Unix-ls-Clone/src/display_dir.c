@@ -56,6 +56,9 @@ void display_dir(const char *dirname)
   }
 
   dynamic_string_array_sort(&string_array);
+  if (strcmp(string_array.array[0], ".")) {
+    dynamic_string_array_swap(&string_array, 0, 1);
+  }
 
   printf("total %u\n", total_blocks);
 

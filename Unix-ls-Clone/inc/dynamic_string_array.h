@@ -42,6 +42,8 @@ void dynamic_string_array_push(dynamic_string_array_t *string_array, char *to_ad
  */
 void dynamic_string_array_pop(dynamic_string_array_t *string_array, char *result);
 
+void dynamic_string_array_swap(dynamic_string_array_t *string_array, int idx1, int idx2);
+
 void dynamic_string_array_sort(dynamic_string_array_t *string_array);
 
 /** @brief Removes all products from the double ended queue.
