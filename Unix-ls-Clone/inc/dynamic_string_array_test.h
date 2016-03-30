@@ -8,6 +8,7 @@
 #include "assert.h"
 
 // local
+#include "common.h"
 #include "dynamic_string_array.h"
 
 void run_tests();

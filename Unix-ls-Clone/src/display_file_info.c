@@ -43,8 +43,8 @@ void display_file_info(const char *filename)
 
   printf("%u\t", (size_t) buf.st_size);
 
-  char buffer[2048];
-  strftime(buffer, 2048, "%b %d %H:%M", localtime(&(buf.st_mtime)));
+  char buffer[MAX_STRING_SIZE];
+  strftime(buffer, MAX_STRING_SIZE, "%b %d %H:%M", localtime(&(buf.st_mtime)));
   printf("%s\t", buffer);
 
   int i;
@@ -71,7 +71,7 @@ void display_file_info(const char *filename)
   } else if (S_ISFIFO(buf.st_mode)) {
     ptr = "|";
   } else if (S_ISLNK(buf.st_mode)) {
-    ptr = "@";
+    ptr = "@ -> ";
   } else if (S_ISSOCK(buf.st_mode)) {
     ptr = "=";
   } else if (S_ISREG(buf.st_mode) && buf.st_mode & 0111) {
@@ -79,6 +79,20 @@ void display_file_info(const char *filename)
   }
 
   if (ptr) printf("%s", ptr);
+
+  if (S_ISLNK(buf.st_mode)) {
+
+    // Zero buffer contents
+    int i;
+    char buffer[MAX_STRING_SIZE];
+    for (i = 0; i < MAX_STRING_SIZE; ++i) {
+      buffer[i] = '\0';
+    }
+
+    readlink(filename, buffer, MAX_STRING_SIZE);
+
+    printf("%s", buffer);
+  }
 
   printf("\n");
 }

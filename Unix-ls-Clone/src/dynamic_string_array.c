@@ -89,7 +89,7 @@ int string_compare(const char *str1, const char *str2) {
   size_t min_len = strlen(str1);
   if (strlen(str2) < min_len) min_len = strlen(str2);
 
-  char lower1[2048], lower2[2048];
+  char lower1[MAX_STRING_SIZE], lower2[MAX_STRING_SIZE];
   string_to_lower(str1, lower1);
   string_to_lower(str2, lower2);
 
