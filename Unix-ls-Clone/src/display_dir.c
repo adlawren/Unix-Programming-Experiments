@@ -27,7 +27,7 @@ void display_dir(const char *dirname)
   // Build list of filenames in the directory
   size_t max_string_size = 2048;
   dynamic_string_array_t string_array;
-  dynamic_string_array_init(&string_array, 10, max_string_size);
+  dynamic_string_array_init(&string_array, 11, max_string_size);
 
   size_t total_blocks = 0;
 
@@ -67,7 +67,7 @@ void display_dir(const char *dirname)
   for (i = 0; i < string_array.size; ++i) {
     display_file_info(string_array.array[i]);
   }
-  
+
   printf("\n");
 
   // Recurse through subdirectories
@@ -93,7 +93,7 @@ void display_dir(const char *dirname)
       fprintf(stderr, "stat error: %s\n", strerror(errno));
       return;
     }
-    
+
     if (S_ISDIR(buf.st_mode)) {
       display_dir(string_array.array[i]);
     }
