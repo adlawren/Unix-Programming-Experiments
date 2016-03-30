@@ -31,22 +31,22 @@ void display_file_info(const char *filename)
 
   // Print permissions
   print_permissions(&buf);
-  printf(" ");
+  printf("\t");
 
-  printf("%u ", (size_t) buf.st_nlink);
+  printf("%u\t", (size_t) buf.st_nlink);
 
   struct passwd *pwd = getpwuid(buf.st_uid);
-  printf("%s ", pwd->pw_name);
+  printf("%s\t", pwd->pw_name);
 
   struct group *grp = getgrgid(buf.st_gid);
-  printf("%s ", grp->gr_name);
+  printf("%s\t", grp->gr_name);
 
-  printf("%*u ", 20, (size_t) buf.st_size);
+  printf("%u\t", (size_t) buf.st_size);
 
   char buffer[2048];
   strftime(buffer, 2048, "%b %d %H:%M", localtime(&(buf.st_mtime)));
-  printf("%s ", buffer);
-  
+  printf("%s\t", buffer);
+
   int i;
   for (i = 0; i < strlen(filename); ++i) {
     buffer[i] = filename[i];
@@ -77,7 +77,7 @@ void display_file_info(const char *filename)
   } else if (S_ISREG(buf.st_mode) && buf.st_mode & 0111) {
     ptr = "*";
   }
-  
+
   if (ptr) printf("%s", ptr);
 
   printf("\n");
