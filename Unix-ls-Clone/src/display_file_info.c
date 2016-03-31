@@ -49,7 +49,19 @@ void print_permissions(struct stat *buf) {
   }
   printf(((*buf).st_mode & S_IROTH) ? "r" : "-");
   printf(((*buf).st_mode & S_IWOTH) ? "w" : "-");
-  printf(((*buf).st_mode & S_IXOTH) ? "x" : "-");
+  if ((*buf).st_mode & S_IXOTH) {
+    if ((*buf).st_mode & S_ISVTX) {
+      printf("t");
+    } else {
+      printf("x");
+    }
+  } else {
+    if ((*buf).st_mode & S_ISVTX) {
+      printf("T");
+    } else {
+      printf("-");
+    }
+  }
 }
 
 void print_file_type(struct stat *buf) {
@@ -58,8 +70,6 @@ void print_file_type(struct stat *buf) {
     ptr = "/";
   } else if (S_ISFIFO((*buf).st_mode)) {
     ptr = "|";
-  } else if (S_ISLNK((*buf).st_mode)) {
-    ptr = " -> ";
   } else if (S_ISSOCK((*buf).st_mode)) {
     ptr = "=";
   } else if (S_ISREG((*buf).st_mode) && (*buf).st_mode & 0111) {
@@ -71,6 +81,9 @@ void print_file_type(struct stat *buf) {
 
 void display_file_info(const char *filename)
 {
+  // Local parameters
+  int i; // Loop index
+  char *token, *prev_token; // For string tokenizing
   struct stat buf;
 
   if (lstat(filename, &buf) < 0) {
@@ -102,14 +115,13 @@ void display_file_info(const char *filename)
   printf("%s\t", buffer);
 
   // Duplicate filename contents
-  int i;
   for (i = 0; i < strlen(filename); ++i) {
     buffer[i] = filename[i];
   }
   buffer[ strlen(filename) ] = 0;
 
   // Get the last '/' delimeted string; the local filename
-  char *token = strtok(buffer, "/"), *prev_token = 0;
+  token = strtok(buffer, "/"), prev_token = 0;
   while ((token = strtok(0, "/")) != 0) {
     prev_token = token;
   }
@@ -120,6 +132,7 @@ void display_file_info(const char *filename)
   print_file_type(&buf);
 
   if (S_ISLNK(buf.st_mode)) {
+    printf(" -> ");
 
     // Zero buffer contents
     int i;
