@@ -2,7 +2,14 @@
 *~
 Fork-Merge-Sort/obj/*
 Fork-Merge-Sort/mergesort
+
 Bounded-Buffer-Problem/obj/*
 Bounded-Buffer-Problem/Factory
+
 Unix-ls-Clone/obj/*
 Unix-ls-Clone/lsRalF
+Unix-ls-Clone/ls_output.txt
+Unix-ls-Clone/lsralf_output.txt
+Unix-ls-Clone/sampe_output
+Unix-ls-Clone/test-dir/
+			
