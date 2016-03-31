@@ -5,6 +5,7 @@ void display_dir(const char *dirname)
   printf("%s:\n", dirname);
 
   // Local parameters
+  int i; // Loop index
   struct stat buf;
 
   // Check if the provided path leads to a directory or not
@@ -24,26 +25,35 @@ void display_dir(const char *dirname)
     return;
   }
 
+  struct dirent **file_list;
+  int file_count = scandir(dirname, &file_list, 0, alphasort);
+
   // Build list of filenames in the directory
-  // size_t max_string_size = 2048;
   dynamic_string_array_t string_array;
-  dynamic_string_array_init(&string_array, 11, MAX_STRING_SIZE);
+  dynamic_string_array_init(&string_array, 10, MAX_STRING_SIZE); // TODO: Refactor out constant
 
   size_t total_blocks = 0;
 
   // Build an array of the directory contents
-  struct dirent *next_dirent;
-  while ((next_dirent = readdir(dp))) {
+  // struct dirent *next_dirent;
+  // while ((next_dirent = readdir(dp))) {
+  for (i = 0; i < file_count; ++i) {
     char full_path[MAX_PATH_LEN];
     strncpy(full_path, dirname, strlen(dirname));
     full_path[ strlen(dirname) ] = 0; // Prevent buffer overrun
 
-    if (full_path[ strlen(dirname) - 1 ] == '/') {
-      strcat(full_path, next_dirent->d_name);
-    } else {
+    // TODO: Refactor; only one branch needed
+    // if (full_path[ strlen(dirname) - 1 ] == '/') {
+    //   strcat(full_path, next_dirent->d_name);
+    // } else {
+    //   strcat(full_path, "/");
+    //   strcat(full_path, next_dirent->d_name);
+    // }
+    if (full_path[ strlen(dirname) - 1 ] != '/') {
       strcat(full_path, "/");
-      strcat(full_path, next_dirent->d_name);
     }
+
+    strcat(full_path, file_list[i]->d_name);
 
     if (lstat(full_path, &buf) < 0) {
       fprintf(stderr, "stat error: %s\n", strerror(errno));
@@ -55,15 +65,14 @@ void display_dir(const char *dirname)
     dynamic_string_array_push(&string_array, full_path);
   }
 
-  dynamic_string_array_sort(&string_array);
-  if (strcmp(string_array.array[0], ".")) {
-    dynamic_string_array_swap(&string_array, 0, 1);
-  }
+  // dynamic_string_array_sort(&string_array);
+  // if (strcmp(string_array.array[0], ".")) {
+  //   dynamic_string_array_swap(&string_array, 0, 1);
+  // }
 
   printf("total %u\n", total_blocks);
 
   // Print the directory contents
-  int i;
   for (i = 0; i < string_array.size; ++i) {
     display_file_info(string_array.array[i]);
   }
@@ -99,7 +108,14 @@ void display_dir(const char *dirname)
     }
   }
 
+  // Free the contents of the dynamic array
   dynamic_string_array_clear(&string_array);
+
+  // Free the contents of the file list
+  for (i = 0; i < file_count; ++i) {
+    free(file_list[i]);
+  }
+  free(file_list);
 
   closedir(dp);
 }
