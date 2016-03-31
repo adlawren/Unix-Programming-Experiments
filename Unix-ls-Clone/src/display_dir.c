@@ -5,7 +5,7 @@ void display_dir(const char *dirname)
   printf("%s:\n", dirname);
 
   // Local parameters
-  int i; // Loop index
+  int i, j; // Loop indices
   struct stat buf;
 
   // Check if the provided path leads to a directory or not
@@ -14,6 +14,7 @@ void display_dir(const char *dirname)
     return;
   }
 
+  // Ensure the provided argument is a directory
   if (S_ISDIR(buf.st_mode) == 0) {
     fprintf(stderr, "ERROR: The given argument is not a directory.\n");
     return;
@@ -25,6 +26,7 @@ void display_dir(const char *dirname)
     return;
   }
 
+  // Retreive the contents of the directory
   struct dirent **file_list;
   int file_count = scandir(dirname, &file_list, 0, alphasort);
 
@@ -36,10 +38,13 @@ void display_dir(const char *dirname)
 
   // Build an array of the directory contents
   for (i = 0; i < file_count; ++i) {
+
+    // Build a string containing the fill path to the next file
     char full_path[MAX_PATH_LEN];
     strncpy(full_path, dirname, strlen(dirname));
     full_path[ strlen(dirname) ] = 0; // Prevent buffer overrun
 
+    // Append a forward slash to the given directory name if needed
     if (full_path[ strlen(dirname) - 1 ] != '/') {
       strcat(full_path, "/");
     }
@@ -56,7 +61,7 @@ void display_dir(const char *dirname)
     dynamic_string_array_push(&string_array, full_path);
   }
 
-  printf("total %u\n", total_blocks);
+  printf("total %lu\n", total_blocks);
 
   // Print the directory contents
   for (i = 0; i < string_array.size; ++i) {
@@ -67,19 +72,22 @@ void display_dir(const char *dirname)
 
   // Recurse through subdirectories
   for (i = 0; i < string_array.size; ++i) {
+
+    // Create a string copy of the next file name
     char temp[MAX_STRING_SIZE];
-    int j;
     for (j = 0; j < strlen(string_array.array[i]); ++j) {
       temp[j] = string_array.array[i][j];
     }
 
     temp[ strlen(string_array.array[i]) ] = 0; // Prevent buffer overrun
 
+    // Get the last '/' delimited string
     char *token = strtok(temp, "/"), *prev_token = 0;
     while ((token = strtok(0, "/")) != 0) {
       prev_token = token;
     }
 
+    // Do not recurse into the '.' or '..' directories
     if ((strcmp(prev_token, ".") == 0) || (strcmp(prev_token, "..") == 0)) {
       continue;
     }

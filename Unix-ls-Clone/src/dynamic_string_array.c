@@ -64,8 +64,15 @@ void dynamic_string_array_pop(dynamic_string_array_t *string_array, char *result
   --string_array->size;
 }
 
+/** @brief Compares the values of two characters.
+ *
+ * @param c1 The first character for comparison.
+ *
+ * @param c2 The second character for comparison.
+ *
+ * @returns int 1 if the first character is less than the second, -1 if the second character is less than the first, 0 otherwise.
+ */
 int char_compare(char c1, char c2) {
-  // int i1 = (int) c1, i2 = (int) c2;
   if (c1 < c2) {
     return 1;
   } else if (c1 > c2) {
@@ -75,6 +82,14 @@ int char_compare(char c1, char c2) {
   }
 }
 
+/** @brief Converts a mixed case string to a lower case string.
+ *
+ * @param str The mixed case string.
+ *
+ * @param lower The string to contain the contents of the mixed case string comprised exclusively of lower case letters.
+ *
+ * @returns void.
+ */
 void string_to_lower(const char *str, char *lower)
 {
   int i;
@@ -85,6 +100,14 @@ void string_to_lower(const char *str, char *lower)
   lower[ strlen(str) ] = 0;
 }
 
+/** @brief Compares the values of two strings.
+ *
+ * @param str1 The first string for comparison.
+ *
+ * @param str2 The second string for comparison.
+ *
+ * @returns int A value greater than or equal to 0 if the strings are in proper order, a value less than 0 otherwise.
+ */
 int string_compare(const char *str1, const char *str2) {
   size_t min_len = strlen(str1);
   if (strlen(str2) < min_len) min_len = strlen(str2);
