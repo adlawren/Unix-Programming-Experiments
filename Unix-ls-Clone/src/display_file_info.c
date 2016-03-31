@@ -35,7 +35,7 @@ void print_file_type(struct stat *buf) {
   } else if (S_ISFIFO((*buf).st_mode)) {
     ptr = "|";
   } else if (S_ISLNK((*buf).st_mode)) {
-    ptr = "@ -> ";
+    ptr = " -> ";
   } else if (S_ISSOCK((*buf).st_mode)) {
     ptr = "=";
   } else if (S_ISREG((*buf).st_mode) && (*buf).st_mode & 0111) {
