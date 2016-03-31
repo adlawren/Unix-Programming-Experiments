@@ -19,10 +19,34 @@ void print_permissions(struct stat *buf) {
 
   printf(((*buf).st_mode & S_IRUSR) ? "r" : "-");
   printf(((*buf).st_mode & S_IWUSR) ? "w" : "-");
-  printf(((*buf).st_mode & S_IXUSR) ? "x" : "-");
+  if ((*buf).st_mode & S_IXUSR) {
+    if ((*buf).st_mode & S_ISUID) {
+      printf("s");
+    } else {
+      printf("x");
+    }
+  } else {
+    if ((*buf).st_mode & S_ISUID) {
+      printf("S");
+    } else {
+      printf("-");
+    }
+  }
   printf(((*buf).st_mode & S_IRGRP) ? "r" : "-");
   printf(((*buf).st_mode & S_IWGRP) ? "w" : "-");
-  printf(((*buf).st_mode & S_IXGRP) ? "x" : "-");
+  if ((*buf).st_mode & S_IXGRP) {
+    if ((*buf).st_mode & S_ISGID) {
+      printf("s");
+    } else {
+      printf("x");
+    }
+  } else {
+    if ((*buf).st_mode & S_ISGID) {
+      printf("S");
+    } else {
+      printf("-");
+    }
+  }
   printf(((*buf).st_mode & S_IROTH) ? "r" : "-");
   printf(((*buf).st_mode & S_IWOTH) ? "w" : "-");
   printf(((*buf).st_mode & S_IXOTH) ? "x" : "-");
