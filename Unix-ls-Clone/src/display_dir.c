@@ -35,20 +35,11 @@ void display_dir(const char *dirname)
   size_t total_blocks = 0;
 
   // Build an array of the directory contents
-  // struct dirent *next_dirent;
-  // while ((next_dirent = readdir(dp))) {
   for (i = 0; i < file_count; ++i) {
     char full_path[MAX_PATH_LEN];
     strncpy(full_path, dirname, strlen(dirname));
     full_path[ strlen(dirname) ] = 0; // Prevent buffer overrun
 
-    // TODO: Refactor; only one branch needed
-    // if (full_path[ strlen(dirname) - 1 ] == '/') {
-    //   strcat(full_path, next_dirent->d_name);
-    // } else {
-    //   strcat(full_path, "/");
-    //   strcat(full_path, next_dirent->d_name);
-    // }
     if (full_path[ strlen(dirname) - 1 ] != '/') {
       strcat(full_path, "/");
     }
@@ -64,11 +55,6 @@ void display_dir(const char *dirname)
 
     dynamic_string_array_push(&string_array, full_path);
   }
-
-  // dynamic_string_array_sort(&string_array);
-  // if (strcmp(string_array.array[0], ".")) {
-  //   dynamic_string_array_swap(&string_array, 0, 1);
-  // }
 
   printf("total %u\n", total_blocks);
 

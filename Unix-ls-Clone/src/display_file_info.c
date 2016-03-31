@@ -5,6 +5,14 @@ void print_permissions(struct stat *buf) {
     printf("d");
   } else if (S_ISLNK((*buf).st_mode)) {
     printf("l");
+  } else if (S_ISFIFO((*buf).st_mode)) {
+    printf("p");
+  } else if (S_ISSOCK((*buf).st_mode)) {
+    printf("s");
+  } else if (S_ISCHR((*buf).st_mode)) {
+    printf("c");
+  } else if (S_ISBLK((*buf).st_mode)) {
+    printf("b");
   } else {
     printf("-");
   }
@@ -18,6 +26,23 @@ void print_permissions(struct stat *buf) {
   printf(((*buf).st_mode & S_IROTH) ? "r" : "-");
   printf(((*buf).st_mode & S_IWOTH) ? "w" : "-");
   printf(((*buf).st_mode & S_IXOTH) ? "x" : "-");
+}
+
+void print_file_type(struct stat *buf) {
+  char *ptr = 0;
+  if (S_ISDIR((*buf).st_mode)) {
+    ptr = "/";
+  } else if (S_ISFIFO((*buf).st_mode)) {
+    ptr = "|";
+  } else if (S_ISLNK((*buf).st_mode)) {
+    ptr = "@ -> ";
+  } else if (S_ISSOCK((*buf).st_mode)) {
+    ptr = "=";
+  } else if (S_ISREG((*buf).st_mode) && (*buf).st_mode & 0111) {
+    ptr = "*";
+  }
+
+  if (ptr) printf("%s", ptr);
 }
 
 void display_file_info(const char *filename)
@@ -61,24 +86,7 @@ void display_file_info(const char *filename)
   printf("%s", prev_token);
 
   // Determine the type of file
-  char *ptr = 0;
-  if (S_ISDIR(buf.st_mode)) {
-    ptr = "/";
-  } else if (S_ISCHR(buf.st_mode)) {
-    ptr = "character special";
-  } else if (S_ISBLK(buf.st_mode)) {
-    ptr = "block special";
-  } else if (S_ISFIFO(buf.st_mode)) {
-    ptr = "|";
-  } else if (S_ISLNK(buf.st_mode)) {
-    ptr = "@ -> ";
-  } else if (S_ISSOCK(buf.st_mode)) {
-    ptr = "=";
-  } else if (S_ISREG(buf.st_mode) && buf.st_mode & 0111) {
-    ptr = "*";
-  }
-
-  if (ptr) printf("%s", ptr);
+  print_file_type(&buf);
 
   if (S_ISLNK(buf.st_mode)) {
 
